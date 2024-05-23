@@ -12,3 +12,111 @@ datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
 }
+
+model user {
+  id           String @id @default(auto()) @map("_id") @db.ObjectId
+  name         String @unique
+  lastname     String
+  email        String
+  password     String
+  phoneNumber  String
+  instagramUrl String
+  facebookUrl  String
+  photoUrl     String
+}
+
+model animals {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  names        String
+  age          Int
+  size         sizes
+  origin       String
+  exotic       Boolean
+  speciesId    String?  @db.ObjectId
+  colorId      String[] @db.ObjectId
+  patronsId    String?  @db.ObjectId
+  tendenciesId String[] @db.ObjectId
+
+  animalTypes species?     @relation(fields: [speciesId], references: [id])
+  color       color[]      @relation(fields: [colorId], references: [id])
+  patrons     patrons?     @relation(fields: [patronsId], references: [id])
+  tendencies  tendencies[] @relation(fields: [tendenciesId], references: [id])
+}
+
+enum sizes {
+  small
+  medium
+  big
+}
+
+model species {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  specie String
+
+  animals animals[]
+  breeds  breeds[]
+}
+
+model breeds {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  breed     String
+  speciesId String? @db.ObjectId
+  habitadId String? @db.ObjectId
+
+  species species? @relation(fields: [speciesId], references: [id])
+  habitad habitad? @relation(fields: [habitadId], references: [id])
+}
+
+model habitad {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  habitad     String
+  space       spaces
+  weathersIds String[] @db.ObjectId
+
+  breeds   breeds[]
+  weathers weather[] @relation(fields: [weathersIds], references: [id])
+}
+
+enum spaces {
+  small
+  medium
+  big
+}
+
+model weather {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  weather     String
+  habitadsIds String[] @db.ObjectId
+
+  habitads habitad[] @relation(fields: [habitadsIds], references: [id])
+}
+
+model color {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  color      String
+  animalsIds String[] @db.ObjectId
+
+  animals animals[] @relation(fields: [animalsIds], references: [id])
+}
+
+// Checar si en vez de hacer una relacion de muchos a muchos, hacer un atributo enum de colores
+
+model patrons {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  patron String
+
+  animals animals[]
+}
+
+model personality {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  personality String
+}
+
+model tendencies {
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  tendency String
+  animalId String[] @db.ObjectId
+
+  animals animals[] @relation(fields: [animalId], references: [id])
+}

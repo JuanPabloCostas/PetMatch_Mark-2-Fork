@@ -11,6 +11,7 @@
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
     "@nextui-org/react": "^2.3.6",
+    "@prisma/client": "^5.13.0",
     "@splinetool/react-spline": "^2.2.6",
     "@splinetool/runtime": "^1.2.6",
     "css-loader": "^7.1.2",
