@@ -1,8 +1,12 @@
 import { Input } from "@nextui-org/input";
 import { Button } from "@nextui-org/react";
 import { Social } from "@/Components/auth/Social";
-import {Switch} from "@nextui-org/react";
+import { signIn } from 'next-auth/react';
+
+
 export default function LoginForm() {
+
+  
   return (
     <>
       <form action="" className="w-[90%] h-full flex flex-col justify-evenly">
