@@ -43,7 +43,7 @@ export default function LandingPage() {
       <div id="conoce-petmatch" className="flex flex-col px-24 mt-32 space-y-32 mb-32">
         <div className="flex justify-between">
           <div className="w-1/2">
-            <h1 className="text-7xl font-bold">Conoce</h1>
+            <h1 className="text-7xl font-bold">Conoce aleluya</h1>
             <p className="text-8xl text-primary-500 mt-4">PetMatch</p>
             <p className="text-justify text-xl">
               PetMatch es una plataforma de adopción de mascotas que ofrece una experiencia personalizada para cada usuario. Nuestro formulario ayuda a encontrar la mascota ideal, y nuestra red social integrada permite compartir consejos y experiencias entre usuarios, creando una comunidad comprometida con el bienestar animal.
