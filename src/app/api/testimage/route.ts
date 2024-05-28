@@ -11,8 +11,15 @@ const s3 = new S3Client({
 })
 
 export async function GET() {
-    const response = await s3.send(new ListObjectsCommand({ Bucket }));
-    return NextResponse.json(response?.Contents ?? []);
+    try {
+        const response = await s3.send(new ListObjectsCommand({ Bucket }));
+        return NextResponse.json(response?.Contents ?? []);
+        
+    } catch (error) {
+        console.log(error);
+        return NextResponse.json({ bucket: Bucket })
+    }
+    
 }
 
 export async function POST(request: NextRequest) {
