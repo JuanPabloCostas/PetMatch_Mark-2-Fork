@@ -31,25 +31,24 @@ model user {
 }
 
 model animals {
-  id              String   @id @default(auto()) @map("_id") @db.ObjectId
-  weight_animal   Float
-  names           String
-  age             Int
-  size            sizes
-  origin          String
-  exotic          Boolean
-  speciesId       String?  @db.ObjectId
-  colorId         String[] @db.ObjectId
-  patronsId       String?  @db.ObjectId
-  tendenciesId    String[] @db.ObjectId
-  personalitiesId String[] @db.ObjectId
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  weight_animal Float
+  names         String
+  age           Int
+  size          sizes
+  training      Boolean
+  speciesId     String?  @db.ObjectId
+  colorId       String[] @db.ObjectId
+  temperamentId String[] @db.ObjectId
+  maintenanceId String?  @db.ObjectId
+  timeNeededId  String?  @db.ObjectId
 
-  animalTypes   species?      @relation(fields: [speciesId], references: [id])
-  color         color[]       @relation(fields: [colorId], references: [id])
-  patrons       patrons?      @relation(fields: [patronsId], references: [id])
-  tendencies    tendencies[]  @relation(fields: [tendenciesId], references: [id])
-  personalities personality[] @relation(fields: [personalitiesId], references: [id])
-  posts         posts?
+  animalTypes  species?      @relation(fields: [speciesId], references: [id])
+  color        color[]       @relation(fields: [colorId], references: [id])
+  temperaments temperament[] @relation(fields: [temperamentId], references: [id])
+  maintenance  maintenance?  @relation(fields: [maintenanceId], references: [id])
+  posts        posts?
+  timeNeeded   timeNeeded?   @relation(fields: [timeNeededId], references: [id])
 }
 
 enum sizes {
@@ -81,7 +80,6 @@ model breeds {
 model habitad {
   id             String   @id @default(auto()) @map("_id") @db.ObjectId
   weight_habitad Float
-  habitad        String
   spaceid        String?  @db.ObjectId
   weathersIds    String[] @db.ObjectId
 
@@ -124,28 +122,11 @@ model color {
 
 // Checar si en vez de hacer una relacion de muchos a muchos, hacer un atributo enum de colores
 
-model patrons {
-  id            String @id @default(auto()) @map("_id") @db.ObjectId
-  weight_patron Float
-  patron        String
-
-  animals animals[]
-}
-
-model personality {
+model temperament {
   id                 String   @id @default(auto()) @map("_id") @db.ObjectId
-  weight_personality Float
-  personality        String
+  weight_temperament Float
+  temperament        String
   animalId           String[] @db.ObjectId
-
-  animals animals[] @relation(fields: [animalId], references: [id])
-}
-
-model tendencies {
-  id              String   @id @default(auto()) @map("_id") @db.ObjectId
-  weight_tendency Float
-  tendency        String
-  animalId        String[] @db.ObjectId
 
   animals animals[] @relation(fields: [animalId], references: [id])
 }
@@ -232,6 +213,18 @@ model survey {
 
   userId String? @unique @db.ObjectId
   user   user?   @relation(fields: [userId], references: [id])
+}
+
+model maintenance {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  maintenance String
+  animals     animals[]
+}
+
+model timeNeeded {
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  timeNeeded String
+  animals    animals[]
 }
 
 // model User {
