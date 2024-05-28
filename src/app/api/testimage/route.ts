@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
 
     } catch (error) {
         console.log(error);
-        return NextResponse.json({ code: 200, message: "ERROR" })
+        return NextResponse.json({ code: 200, message: "ERROR", bucket: Bucket })
     }
 
 }
