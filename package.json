@@ -17,6 +17,7 @@
     "@splinetool/runtime": "^1.2.6",
     "bcrypt": "^5.1.1",
     "aws-sdk": "^2.1628.0",
+    "bcrypt": "^5.1.1",
     "css-loader": "^7.1.2",
     "dotenv": "^16.4.5",
     "framer-motion": "^11.1.7",
