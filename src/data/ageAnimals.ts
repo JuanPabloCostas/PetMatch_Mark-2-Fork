@@ -9,3 +9,9 @@ export const ageAnimals: ageAnimal[] = [
     { label: "Adulto", value: 0.75 },
     { label: "Viejo", value: 1 },
 ]
+  
+  // Define the getAgeLabel function
+  export const getAgeLabel = (ageValue?: number): string => {
+    const ageAnimal = ageAnimals.find((ageAnimal) => ageAnimal.value === ageValue);
+    return ageAnimal ? ageAnimal.label : 'Desconocido';
+  };

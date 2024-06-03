@@ -13,7 +13,7 @@ interface UserData{
 const PostProps = [
     {
       id: 1,
-      image: "https://nextui.org/images/hero-card.jpeg",
+      urlImage: "https://nextui.org/images/hero-card.jpeg",
       avatar: "https://i.pravatar.cc/150?u=a042581f4e29026024d",
       user: "Usuario 1",
       content: "Contenido del post 1",
@@ -26,7 +26,7 @@ const PostProps = [
     },
     {
       id: 2,
-      image: "https://nextui.org/images/album-cover.png",
+      urlImage: "https://nextui.org/images/album-cover.png",
       avatar: "https://i.pravatar.cc/150?u=a04258a2462d826712d",
       user: "Usuario 2",
       content: "Contenido del post 2",
@@ -39,7 +39,7 @@ const PostProps = [
     },
     {
       id: 3,
-      image: "https://nextui-docs-v2.vercel.app/images/fruit-1.jpeg",
+      urlImage: "https://nextui-docs-v2.vercel.app/images/fruit-1.jpeg",
       avatar: "https://i.pravatar.cc/150?u=a04258a2462d826712d",
       user: "Usuario 3",
       content: "Contenido del post 3",
@@ -52,7 +52,7 @@ const PostProps = [
     },
     {
       id: 4,
-      image: "https://nextui-docs-v2.vercel.app/images/fruit-2.jpeg",
+      urlImage: "https://nextui-docs-v2.vercel.app/images/fruit-2.jpeg",
       avatar: "https://i.pravatar.cc/150?u=a04258a2462d826712d",
       user: "Usuario 3",
       content: "Contenido del post 3",
@@ -65,7 +65,7 @@ const PostProps = [
     },
     {
       id: 5,
-      image: "https://nextui-docs-v2.vercel.app/images/fruit-3.jpeg",
+      urlImage: "https://nextui-docs-v2.vercel.app/images/fruit-3.jpeg",
       avatar: "https://i.pravatar.cc/150?u=a04258a2462d826712d",
       user: "Usuario 3",
       content: "Contenido del post 3",
@@ -78,7 +78,7 @@ const PostProps = [
     },
     {
       id: 6,
-      image: "https://nextui-docs-v2.vercel.app/images/fruit-7.jpeg",
+      urlImage: "https://nextui-docs-v2.vercel.app/images/fruit-7.jpeg",
       avatar: "https://i.pravatar.cc/150?u=a04258a2462d826712d",
       user: "Usuario 3",
       content: "Contenido del post 3",
@@ -91,7 +91,7 @@ const PostProps = [
     },
     {
       id: 7,
-      image: "https://nextui-docs-v2.vercel.app/images/fruit-8.jpeg",
+      urlImage: "https://nextui-docs-v2.vercel.app/images/fruit-8.jpeg",
       avatar: "https://i.pravatar.cc/150?u=a04258a2462d826712d",
       user: "Usuario 3",
       content: "Contenido del post 3",
@@ -104,7 +104,7 @@ const PostProps = [
     },
     {
       id: 8,
-      image: "https://nextui-docs-v2.vercel.app/images/fruit-8.jpeg",
+      urlImage: "https://nextui-docs-v2.vercel.app/images/fruit-8.jpeg",
       avatar: "https://i.pravatar.cc/150?u=a04258a2462d826712d",
       user: "Usuario 3",
       content: "Contenido del post 3",
@@ -117,7 +117,7 @@ const PostProps = [
     },
     {
       id: 9,
-      image: "https://nextui-docs-v2.vercel.app/images/fruit-8.jpeg",
+      urlImage: "https://nextui-docs-v2.vercel.app/images/fruit-8.jpeg",
       avatar: "https://i.pravatar.cc/150?u=a04258a2462d826712d",
       user: "Usuario 3",
       content: "Contenido del post 3",
@@ -130,7 +130,7 @@ const PostProps = [
     },
     {
       id: 10,
-      image: "https://nextui-docs-v2.vercel.app/images/fruit-8.jpeg",
+      urlImage: "https://nextui-docs-v2.vercel.app/images/fruit-8.jpeg",
       avatar: "https://i.pravatar.cc/150?u=a04258a2462d826712d",
       user: "Usuario 3",
       content: "Contenido del post 3",
@@ -174,7 +174,7 @@ export default function Profile() {
             <PostCard
               key={post.id}
               id={post.id}
-              image={post.image}
+              urlImage={post.urlImage}
               avatar={post.avatar}
               user={post.user}
               content={post.content}
