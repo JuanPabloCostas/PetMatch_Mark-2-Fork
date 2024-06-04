@@ -104,6 +104,8 @@ export default function PrincipalPage() {
   const { data: session } = useSession();
   const email = session?.user?.email;
 
+
+
   const [PostProps, setPostProps] = useState([
     {
     id: 1,
@@ -111,7 +113,7 @@ export default function PrincipalPage() {
     avatar: "https://i.pravatar.cc/150?u=a042581f4e29026024d",
     user: "Usuario 1",
     content: "Contenido del post 1",
-    race: "Raza 1",
+    breed: "Raza 1",
     size: "Tamaño 1",
     age: "Edad 1",
     instagram: "@usuario1",
@@ -156,6 +158,45 @@ export default function PrincipalPage() {
     }
   }, [session]);
 
+  useEffect(() => {
+
+    const getPostsId = async () => {
+      try {
+        const postsIds = await fetch(`https://v4utf4qdjgpkumci6ogti5psdu0urtem.lambda-url.us-east-1.on.aws/surveys/Prietokun2@example.com`)
+
+        const result = await postsIds.json()
+
+        console.log(result);
+
+        const list = {
+          list: result
+        }
+
+        const posts = await fetch(`/api/posts/getMany`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(list),
+        })
+
+        const finalResult = await posts.json()
+
+        console.log(finalResult.data);
+        
+        setPostProps(finalResult.data)
+        
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    
+    getPostsId();
+  
+    
+  }, [session])
+  
+
   
 
   return (
@@ -197,7 +238,7 @@ export default function PrincipalPage() {
               avatar={post.avatar}
               user={post.user}
               content={post.content}
-              race={post.race}
+              race={post.breed}
               size={post.size}
               age={post.age}
               instagram={post.instagram}
