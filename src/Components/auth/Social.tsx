@@ -8,7 +8,7 @@ export const Social = () => {
 
 
     const handleGoogleSignIn = async () => {
-        await signIn('google', {callbackUrl: "http://3.232.253.147:3000/user/PrincipalPage"});
+        await signIn('google', {callbackUrl: "/user/PrincipalPage"});
     };
 
     
