@@ -162,7 +162,10 @@ export default function PrincipalPage() {
 
     const getPostsId = async () => {
       try {
-        const postsIds = await fetch(`https://v4utf4qdjgpkumci6ogti5psdu0urtem.lambda-url.us-east-1.on.aws/surveys/Prietokun2@example.com`)
+
+        if (!email) return;
+        
+        const postsIds = await fetch(`https://v4utf4qdjgpkumci6ogti5psdu0urtem.lambda-url.us-east-1.on.aws/surveys/${email}`)
 
         const result = await postsIds.json()
 
@@ -183,8 +186,10 @@ export default function PrincipalPage() {
         const finalResult = await posts.json()
 
         console.log(finalResult.data);
+        if (finalResult.data) {
+          setPostProps(finalResult.data)
+        }
         
-        setPostProps(finalResult.data)
         
       } catch (error) {
         console.log(error);
