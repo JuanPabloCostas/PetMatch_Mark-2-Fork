@@ -3,8 +3,8 @@ import React from "react";
 export default function Footer() {
   return (
     <>
-      <div className="flex flex-col bg-[#FFD893] w-full h-72">
-        <div className="flex flex-col bg-[#FFD893] w-full h-72 p-16 gap-4">
+      <div className="flex flex-col bg-[#FFD893] w-full min-h-72">
+        <div className="flex flex-col bg-[#FFD893] w-full min-h-72 p-16 gap-4">
           <header className="flex flex-row">
             <h1 className="text-2xl text-black font-bold">PetMatch</h1>
           </header>

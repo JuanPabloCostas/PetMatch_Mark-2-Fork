@@ -45,11 +45,13 @@ export default function LandingPage() {
           <div className="w-1/2">
             <h1 className="text-7xl font-bold">Conoce</h1>
             <p className="text-8xl text-primary-500 mt-4">PetMatch</p>
+            <div></div>
             <p className="text-justify text-xl">
               PetMatch es una plataforma de adopción de mascotas que ofrece una experiencia personalizada para cada usuario. Nuestro formulario ayuda a encontrar la mascota ideal, y nuestra red social integrada permite compartir consejos y experiencias entre usuarios, creando una comunidad comprometida con el bienestar animal.
             </p>
           </div>
-          <Image width={600} alt="NextUI hero Image" src="/Lomito.jpg" />
+          {/* <Image width={600} alt="NextUI hero Image" src="/Lomito.jpg" /> */}
+          <p>hola</p>
         </div>
         <div className="flex flex-col gap-8">
           <h1 className="font-bold text-7xl text-center">Testimonios</h1>
