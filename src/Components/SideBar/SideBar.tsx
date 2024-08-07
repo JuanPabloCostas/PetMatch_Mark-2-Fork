@@ -177,7 +177,6 @@ export default function Sidebar() {
                 <span className="material-symbols-outlined">groups</span>
               </Button>
             </Tooltip>
-
             <Tooltip content="Subir" placement="right" size="sm">
               <Button
                 variant="light"
