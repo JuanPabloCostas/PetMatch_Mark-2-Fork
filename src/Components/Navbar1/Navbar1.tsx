@@ -6,6 +6,7 @@ import type { ButtonProps } from "@relume_io/relume-ui";
 import { AnimatePresence, motion } from "framer-motion";
 import { RxChevronDown } from "react-icons/rx";
 import { Button } from "@nextui-org/react"
+import { useRouter } from "next/navigation"
 
 type ImageProps = {
   url?: string;
@@ -28,6 +29,18 @@ type Props = {
 export type Navbar1Props = React.ComponentPropsWithoutRef<"section"> & Partial<Props>;
 
 export const Navbar1 = (props: Navbar1Props) => {
+
+
+  const router = useRouter();
+
+  const signIn = () => {
+    router.push('/sign-in'); 
+  };
+
+  const signUp = () => {
+    router.push('/sign-up'); 
+  };
+
   const { logo, navLinks, buttons } = {
     ...Navbar1Defaults,
     ...props,
@@ -92,8 +105,8 @@ export const Navbar1 = (props: Navbar1Props) => {
             </div>
           ))}
           <div className="mt-6 flex flex-col items-center gap-4 lg:ml-4 lg:mt-0 lg:flex-row">
-            <Button className="border-1 border-primary-500 bg-transparent hover:bg-primary-500 hover:text-white">Iniciar Sesión</Button>
-            <Button className="bg-success-400">Registrate</Button>
+            <Button onClick={signIn} className="border-1 border-primary-500 bg-transparent hover:bg-primary-500 hover:text-white">Iniciar Sesión</Button>
+            <Button onClick={signUp} className="bg-success-400">Registrate</Button>
           </div>
         </motion.div>
       </div>
@@ -144,7 +157,7 @@ const SubMenu = ({ navLink, isMobile }: { navLink: NavLink; isMobile: boolean })
             initial="close"
             exit="close"
             transition={{ duration: 0.2 }}
-            className="bg-background-primary lg:absolute lg:z-50 lg:border lg:border-border-primary lg:p-2 lg:[--y-close:25%]"
+            className="bg-background-primary lg:absolute lg:z-50 lg:border lg:border-border-primary rounded-md shadow-xsmall lg:p-2 lg:[--y-close:25%]"
           >
             {navLink.subMenuLinks?.map((navLink, index) => (
               <a
