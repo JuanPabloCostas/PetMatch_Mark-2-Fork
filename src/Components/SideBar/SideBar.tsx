@@ -51,8 +51,6 @@ export default function Sidebar() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { user } = useUser();
 
-  
-
   const handleShowImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -76,7 +74,6 @@ export default function Sidebar() {
         const imageFormData = new FormData();
         imageFormData.append("image", blob, "image.jpg");
 
-        // Primera solicitud para insertar en el bucket de AWS
         const uploadResponse = await fetch("/api/uploadImage", {
           method: "POST",
           body: imageFormData,
@@ -85,11 +82,11 @@ export default function Sidebar() {
         if (uploadResponse.ok) {
           const data = await uploadResponse.json();
           console.log("Imagen subida correctamente. URL:", data.url);
-          // Segunda solicitud para insertar en la base de datos
+
           const postFormData = {
             ...formData,
             imageUrl: data.url,
-            email: user?.primaryEmailAddress?.emailAddress
+            email: user?.primaryEmailAddress?.emailAddress,
           };
 
           const postResponse = await fetch("/api/posts", {
@@ -133,11 +130,10 @@ export default function Sidebar() {
             width={50}
             height={50}
             alt="Logo"
-            className="hidden xl:block" // Ocultar en móviles, mostrar en pantallas grandes
+            className="hidden xl:block"
           />
 
           <div className="flex flex-row gap-4 w-full justify-between xl:flex-col">
-
             <Tooltip content="Recomendaciones" placement="right" size="sm">
               <Button
                 variant="light"
@@ -145,7 +141,7 @@ export default function Sidebar() {
                 color="primary"
                 radius="sm"
                 isIconOnly
-                as={Link} // Enlace al catálogo
+                as={Link}
                 href="/user/PrincipalPage"
               >
                 <span className="material-symbols-outlined">local_library</span>
@@ -159,7 +155,7 @@ export default function Sidebar() {
                 color="primary"
                 radius="sm"
                 isIconOnly
-                as={Link} // Enlace al catálogo
+                as={Link}
                 href="/user/Catalogue"
               >
                 <span className="material-symbols-outlined">auto_stories</span>
@@ -173,12 +169,13 @@ export default function Sidebar() {
                 color="primary"
                 radius="sm"
                 isIconOnly
-                as={Link} // Enlace al catálogo
+                as={Link}
                 href="/user/Community"
               >
                 <span className="material-symbols-outlined">groups</span>
               </Button>
             </Tooltip>
+
             <Tooltip content="Subir" placement="right" size="sm">
               <Button
                 variant="light"
@@ -191,9 +188,9 @@ export default function Sidebar() {
                 <span className="material-symbols-outlined">add_a_photo</span>
               </Button>
             </Tooltip>
-
           </div>
         </div>
+
         <div className="p-2 mt-auto">
           <SignedIn>
             <UserButton />
@@ -202,6 +199,7 @@ export default function Sidebar() {
             <SignInButton />
           </SignedOut>
         </div>
+
         <Modal isOpen={isOpen} onClose={onClose} className="p-2" size="2xl">
           <ModalContent className="max-h-[90vh] overflow-auto">
             <form onSubmit={handleSubmit} className="flex flex-col h-full">
