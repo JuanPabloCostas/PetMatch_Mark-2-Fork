@@ -2,9 +2,10 @@
 
 import React, { useEffect, useState } from "react";
 import CommunityCard from "@/Components/CommunityCard/CommunityCard";
-import AddComment from "@/Components/AddComment/AddComment";
+import AddPost from "@/Components/AddPost/AddPost";
 import { useUser } from "@clerk/nextjs";
 import RightSidebar from "@/Components/RightSideBar/RightSideBar";
+import { Button, Divider } from "@nextui-org/react";
 
 interface FormattedPost {
   id: string;
@@ -74,10 +75,13 @@ const Community = () => {
   return (
     <div className="flex flex-row gap-4">
       <div className="flex flex-col w-full">
-      <header className="flex flex-row w-full justify-between items-center top-0 bg-white rounded-md p-4">
-        <h1 className="text-4xl font-bold">Comunidad</h1>
-      </header>
-        <AddComment />
+        {/* <header className="w-full pb-4 overflow-auto sticky top-0 bg-white bg-opacity-90 z-10 shadow-md" style={{ backgroundColor: "rgba(255, 255, 255, 0.9)" }}>
+          <div>
+            <Button variant="ghost" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>Inicio</Button>
+          </div>
+        </header> */}
+        <AddPost />
+        <Divider/>
         <CommunityCard
           posts={posts}
           handleFavorite={handleFavorite}
