@@ -75,14 +75,9 @@ export default function Sidebar() {
 
         const imageFormData = new FormData();
         imageFormData.append("image", blob, "image.jpg");
-<<<<<<< HEAD
-        // First Fetch to Insert into AWS Bucket
-        const uploadResponse = await fetch("/api/testimage", {
-=======
 
         // Primera solicitud para insertar en el bucket de AWS
         const uploadResponse = await fetch("/api/uploadImage", {
->>>>>>> dev
           method: "POST",
           body: imageFormData,
         });
@@ -94,11 +89,7 @@ export default function Sidebar() {
           const postFormData = {
             ...formData,
             imageUrl: data.url,
-<<<<<<< HEAD
-            userEmail: session?.user?.email || ''
-=======
             email: user?.primaryEmailAddress?.emailAddress
->>>>>>> dev
           };
 
           const postResponse = await fetch("/api/posts", {
@@ -127,10 +118,6 @@ export default function Sidebar() {
     }
   };
 
-<<<<<<< HEAD
-=======
-
->>>>>>> dev
   useEffect(() => {
     if (!isLoading) {
       onClose();
@@ -150,11 +137,8 @@ export default function Sidebar() {
           />
 
           <div className="flex flex-row gap-4 w-full justify-between xl:flex-col">
-<<<<<<< HEAD
-            <Tooltip content="Catálogo Personal" placement="right" size="sm">
-=======
+
             <Tooltip content="Recomendaciones" placement="right" size="sm">
->>>>>>> dev
               <Button
                 variant="light"
                 className="p-6 bg-primary hover:bg-primary-500 hover:text-white transition-all duration-300"
@@ -207,12 +191,7 @@ export default function Sidebar() {
                 <span className="material-symbols-outlined">add_a_photo</span>
               </Button>
             </Tooltip>
-<<<<<<< HEAD
-            
-            <UserButton />
-          </div>
-        </div>
-=======
+
           </div>
         </div>
         <div className="p-2 mt-auto">
@@ -223,7 +202,6 @@ export default function Sidebar() {
             <SignInButton />
           </SignedOut>
         </div>
->>>>>>> dev
         <Modal isOpen={isOpen} onClose={onClose} className="p-2" size="2xl">
           <ModalContent className="max-h-[90vh] overflow-auto">
             <form onSubmit={handleSubmit} className="flex flex-col h-full">
