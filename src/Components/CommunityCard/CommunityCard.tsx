@@ -10,17 +10,17 @@ interface Post {
   comments: number;
 }
 
-
-const CommunityCard: React.FC<CommunityCardProps> = ({ posts, handleFavorite, handleAddComment, handleReply }) => {
+interface CommunityCardProps {
+  posts: Post[];
   handleFavorite: (id: string) => void;
   handleAddComment: (id: string) => void;
   handleReply: (id: string) => void;
 }
 
 const CommunityCard: React.FC<CommunityCardProps> = ({ posts, handleFavorite, handleAddComment, handleReply }) => {
-  const [favorites, setFavorites] = useState<number[]>([]);
+  const [favorites, setFavorites] = useState<string[]>([]);
 
-  const toggleFavorite = (id: number) => {
+  const toggleFavorite = (id: string) => {
     if (favorites.includes(id)) {
       setFavorites(favorites.filter(favId => favId !== id));
     } else {
@@ -28,7 +28,7 @@ const CommunityCard: React.FC<CommunityCardProps> = ({ posts, handleFavorite, ha
     }
     handleFavorite(id);
   };
-  
+
   return (
     <>
       {posts.map((post) => (

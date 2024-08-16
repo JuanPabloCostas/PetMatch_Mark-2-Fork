@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
       sizeH,
       description,
       imageUrl,
-      userEmail, 
+      email, // Usaremos el email del usuario
     } = await request.json();
 
     if (
@@ -36,11 +36,25 @@ export async function POST(request: NextRequest) {
       !sizeH ||
       !description ||
       !imageUrl ||
-      !userEmail 
+      !email // Validamos que el email esté presente
     ) {
       return NextResponse.json({
         code: 400,
         message: "Faltan campos obligatorios. Por favor completa el formulario.",
+      });
+    }
+
+    // Buscar el usuario a partir del email
+    const user = await prisma.user.findUnique({
+      where: {
+        email,
+      },
+    });
+
+    if (!user) {
+      return NextResponse.json({
+        code: 404,
+        message: "Usuario no encontrado.",
       });
     }
 
@@ -71,10 +85,10 @@ export async function POST(request: NextRequest) {
         adopted: false,
         description,
         active: true,
-        craetedAt: new Date().toISOString(),
+        createdAt: new Date(), // Usa el objeto Date directamente
         urlImage: imageUrl,
         animalId: animal.id,
-        userEmail: userEmail, 
+        userEmail: email, // Usamos email en lugar de userId
       },
     });
 
@@ -87,7 +101,7 @@ export async function POST(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error(error);
+    console.error("Error en el proceso de POST:", error);
     return NextResponse.json({
       code: 500,
       message: "Ocurrió un error en el servidor.",
@@ -95,8 +109,10 @@ export async function POST(request: NextRequest) {
   }
 }
 
+
 export async function GET(request: NextRequest) {
   try {
+    // Obtén todos los posts, incluyendo la información relacionada del usuario y del animal
     const posts = await prisma.posts.findMany({
       select: {
         urlImage: true,
@@ -106,21 +122,23 @@ export async function GET(request: NextRequest) {
             breed: true,
             size: true,
             age: true,
-          }
+          },
         },
         user: {
           select: {
             username: true,
-          }
+          },
         },
       },
+      // Filtra posts donde `userId` no sea nulo
       where: {
         userEmail: {
-          not: '' 
-        }
-      }
+          not: '',
+        },
+      },
     });
 
+    // Mapea los posts para añadir el mensaje "Publicación:"
     const postsWithMessages = posts.map((post) => {
       return {
         message: "Publicación:",
@@ -128,6 +146,7 @@ export async function GET(request: NextRequest) {
       };
     });
 
+    // Devuelve una respuesta JSON con el código 200 y los datos de los posts
     return NextResponse.json({
       code: 200,
       message: "Datos recuperados correctamente.",
@@ -141,5 +160,3 @@ export async function GET(request: NextRequest) {
     });
   }
 }
-
-

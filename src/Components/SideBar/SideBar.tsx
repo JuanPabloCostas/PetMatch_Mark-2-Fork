@@ -4,7 +4,8 @@ import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { Button, Tooltip, Modal, ModalContent, useDisclosure, Tabs, Tab, CardBody, Card, Link, CardFooter, CardHeader, CircularProgress } from "@nextui-org/react";
 import FormNewPost from "../FormNewPost/FormNewPost";
-import { SignedIn, SignedOut, SignInButton, SignOutButton, UserButton } from "@clerk/nextjs";
+import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
 
 interface FormData {
   types?: string[];
@@ -42,17 +43,15 @@ const initialFormData: FormData = {
   facebook: "",
 };
 
-// Datos de usuario estáticos
-const staticUser = {
-  email: "user@example.com"
-};
-
 export default function Sidebar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const imageIptRef = useRef<HTMLInputElement>(null);
   const [formData, setFormData] = useState<FormData>(initialFormData);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { user } = useUser();
+
+  
 
   const handleShowImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -78,7 +77,7 @@ export default function Sidebar() {
         imageFormData.append("image", blob, "image.jpg");
 
         // Primera solicitud para insertar en el bucket de AWS
-        const uploadResponse = await fetch("/api/testimage", {
+        const uploadResponse = await fetch("/api/uploadImage", {
           method: "POST",
           body: imageFormData,
         });
@@ -86,12 +85,11 @@ export default function Sidebar() {
         if (uploadResponse.ok) {
           const data = await uploadResponse.json();
           console.log("Imagen subida correctamente. URL:", data.url);
-
           // Segunda solicitud para insertar en la base de datos
           const postFormData = {
             ...formData,
             imageUrl: data.url,
-            userEmail: staticUser.email
+            email: user?.primaryEmailAddress?.emailAddress
           };
 
           const postResponse = await fetch("/api/posts", {
