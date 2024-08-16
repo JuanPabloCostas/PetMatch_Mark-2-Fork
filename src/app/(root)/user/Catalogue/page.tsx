@@ -19,7 +19,7 @@ export default function Catalogue() {
       try {
         const response = await fetch("/api/posts");
         if (!response.ok) {
-          throw new Error("Failed to fetch data");
+          throw new Error("Failed to fetch datas");
         }
         const data = await response.json();
         console.log(data.data);

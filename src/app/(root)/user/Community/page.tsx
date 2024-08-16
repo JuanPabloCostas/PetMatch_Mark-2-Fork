@@ -1,9 +1,10 @@
-"use client"
+"use client";
 
 import React, { useEffect, useState } from "react";
 import CommunityCard from "@/Components/CommunityCard/CommunityCard";
 import AddComment from "@/Components/AddComment/AddComment";
 import { useUser } from "@clerk/nextjs";
+import RightSidebar from "@/Components/RightSideBar/RightSideBar";
 
 interface FormattedPost {
   id: string;
@@ -15,7 +16,7 @@ interface FormattedPost {
 }
 
 const Community = () => {
-  const [posts, setPosts] = useState<FormattedPost[]>([]); 
+  const [posts, setPosts] = useState<FormattedPost[]>([]);
   const { user } = useUser();
 
   useEffect(() => {
@@ -34,7 +35,6 @@ const Community = () => {
           throw new Error(resBody.message || "Error fetching comments");
         }
 
-        // Accede a la propiedad 'data' que contiene el array de comentarios
         const commentsArray = resBody.data;
 
         if (Array.isArray(commentsArray)) {
@@ -42,12 +42,12 @@ const Community = () => {
             id: comment.id,
             user: comment.user?.fullname || "Anonymous",
             message: comment.text,
-            avatar: comment.user?.photoUrl || user?.imageUrl || "https://i.pravatar.cc/150?u=default",
-            image: comment.imgUrl || "", 
+            avatar: comment.user?.photoUrl || user?.imageUrl || "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp",
+            image: comment.imgUrl || "",
             comments: comment.childrenComments?.length || 0,
           }));
 
-          setPosts(formattedPosts); // Asignación directa
+          setPosts(formattedPosts);
         } else {
           console.error('Unexpected response format:', resBody);
         }
@@ -67,22 +67,11 @@ const Community = () => {
     console.log(`Agregar comentario en post ${id}`);
   };
 
-  const handleReply = (id: any) => {
+  const handleReply = (id: string) => {
     console.log(`Responder al post ${id}`);
   };
 
   return (
-    <div>
-      <header className="flex flex-row w-full justify-between items-center top-0 bg-white rounded-md p-4">
-        <h1 className="text-4xl font-bold">Comunidad</h1>
-      </header>
-      <AddComment />
-      <CommunityCard
-        posts={posts}
-        handleFavorite={handleFavorite}
-        handleAddComment={handleAddComment}
-        handleReply={handleReply}
-      />
     <div className="flex flex-row gap-4">
       <div className="flex flex-col w-full">
       <header className="flex flex-row w-full justify-between items-center top-0 bg-white rounded-md p-4">
