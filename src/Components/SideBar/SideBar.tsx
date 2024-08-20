@@ -122,11 +122,11 @@ export default function Sidebar() {
   }, [isLoading, onClose]);
 
   return (
-    <nav className="xl:h-screen shadow-xl xl:w-fit w-full flex lg:flex-col p-4">
+    <nav className="xl:h-screen shadow-xl xl:w-fit w-full flex lg:flex-col p-4 shadow">
       <div className="flex flex-col justify-between h-full w-full">
         <div className="flex xl:flex-col xl:gap-6 w-full justify-between flex-row items-center">
           <Image
-            src="/Logo.svg"
+            src="/ZORRO1.svg"
             width={50}
             height={50}
             alt="Logo"
