@@ -1,4 +1,5 @@
 
+
 export async function getUserStatus(email: string): Promise<{ id: string; photoUrl: string; onboarded: boolean } | null> {
   try {
     const response = await fetch(`/api/auth/onboarding?email=${email}`, {
