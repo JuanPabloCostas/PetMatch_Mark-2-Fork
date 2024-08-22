@@ -126,7 +126,9 @@ export async function GET(request: NextRequest) {
         },
         user: {
           select: {
+            fullname:true,
             username: true,
+            photoUrl:true
           },
         },
       },

@@ -27,7 +27,7 @@ export default function FullPostCard({ id, urlImage, avatar, fullname, username,
         <header className="flex flex-row items-center justify-between">
           <div className="flex flex-row gap-4 items-center">
             <Avatar src={avatar} size="md" />
-            <p className="text-sm">{fullname} <span className="text-gray-500">@{username}</span></p>
+            <p className="text-sm">{fullname} <span className="text-gray-500 ml-1" >@{username}</span></p>
           </div>
           <Button isIconOnly className="bg-transparent">
             <span className="material-symbols-outlined">more_horiz</span>

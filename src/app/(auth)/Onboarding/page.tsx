@@ -1,9 +1,10 @@
 'use client'
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button, Input, Textarea, Avatar, CircularProgress, Select, SelectItem } from "@nextui-org/react";
 import { FaArrowLeft } from "react-icons/fa";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
+import { getUserStatus } from "@/libs/actions/user.actions";
 
 interface FormData {
   fullname: string;
@@ -34,6 +35,26 @@ const Onboarding: React.FC = () => {
     bio: "",
     photoUrl: "",
   });
+  const { user } = useUser();
+  const router = useRouter();
+
+  useEffect(() => {
+    const checkUserStatus = async () => {
+      if (user && user.emailAddresses[0].emailAddress) {
+        try {
+          const email = user.emailAddresses[0].emailAddress;
+          const userStatus = await getUserStatus(email);
+          if (userStatus && userStatus.onboarded) {
+            router.push('/user/PrincipalPage');
+          }
+        } catch (error) {
+          console.error("Error fetching user status:", error);
+        }
+      }
+    };
+
+    checkUserStatus();
+  }, [user, router]);
 
   const handleNextStep = () => {
     setStep((prevStep) => prevStep + 1);

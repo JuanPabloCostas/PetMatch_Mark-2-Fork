@@ -1,4 +1,3 @@
-// page.ts
 'use client'
 import React, { useState, useEffect } from "react";
 import PostCard from "@/Components/PostCard/PostCard";
@@ -43,20 +42,23 @@ export default function Catalogue() {
         const data = await response.json();
         console.log(data.data);
 
-        const formattedPosts = data.data.map((post: any, index: number) => ({
-          id: index,
-          urlImage: post.urlImage,
-          avatar: post.user.photoUrl,
-          fullname: post.user.fullname,
-          username: post.user.username,
-          content: post.description,
-          race: post.animal.breed,
-          size: getSizeLabel(post.animal.size),
-          age: getAgeLabel(post.animal.age),
-          instagram: "",
-          whatsapp: "",
-          facebook: ""
-        }));
+        const formattedPosts = data.data.map((post: any, index: number) => {
+          const formattedPost = {
+            id: index,
+            urlImage: post.urlImage,
+            avatar: post.user.photoUrl,
+            fullname: post.user.fullname,
+            username: post.user.username,
+            content: post.description,
+            race: post.animal.breed,
+            size: getSizeLabel(post.animal.size),
+            age: getAgeLabel(post.animal.age),
+            instagram: "",
+            whatsapp: "",
+            facebook: ""
+          };
+          return formattedPost;
+        });
 
         setPosts(formattedPosts);
       } catch (error) {
