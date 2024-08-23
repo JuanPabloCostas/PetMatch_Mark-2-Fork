@@ -1,0 +1,17 @@
+import prisma from "@/libs/db";
+import { NextRequest, NextResponse } from "next/server";
+
+export async function GET(request: NextRequest, { params }: any) {
+  try {
+    const id = params.id;
+    const post = await prisma.posts.findUnique({
+      where: {
+        id: id,
+      },
+    });
+    return NextResponse.json(post);
+  } catch (error) {
+    console.log(error);
+    return NextResponse.json({ code: 500, message: "ERROR" });
+  }
+}
