@@ -66,6 +66,45 @@
     color: #010101
 }
 
+.centeredFixedDiv {
+  position: fixed;
+  width: 40%;
+  text-align: center;
+  top: 25%;
+  left: 50%;
+  padding: 20px;
+  transform: translate(-50%, 0);
+  z-index: 9999;
+}
+
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 99; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  
+}
+
+.modal-content {
+  background-color: #fefefe;
+  padding: 0px;
+  border: 1px solid #888;
+  width: auto; /* Could be more or less, depending on screen size */
+  height: auto;
+  max-height: 85vh;
+  max-width: 75vw;
+}
+
+.is-active {
+  display: flex; /* Use flexbox for centering */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  background-color: rgba(0,0,0,0.6); /* Black w/ opacity */
+}
+
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
