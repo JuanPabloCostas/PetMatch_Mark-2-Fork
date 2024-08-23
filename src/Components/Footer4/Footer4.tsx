@@ -51,7 +51,7 @@ export const Footer4 = (props: Footer4Props) => {
       <div className="container">
         <div className="grid grid-cols-1 items-center justify-center justify-items-center gap-x-[4vw] gap-y-12 pb-12 md:pb-18 lg:grid-cols-[0.25fr_1fr_0.25fr] lg:justify-between lg:gap-y-4 lg:pb-20">
           <a href={logo.url} className="lg:justify-self-start">
-            <img src={logo.src} alt={logo.alt} className="inline-block w-[90px] h-[90px]" />
+            <img src={logo.src} alt={logo.alt} className="inline-block w-[100px] h-[90px]" />
           </a>
           {columnLinks.map((column, index) => (
             <ul
@@ -78,7 +78,7 @@ export const Footer4 = (props: Footer4Props) => {
           <p className="mt-8 md:mt-0">{footerText}</p>
           <ul className="grid grid-flow-row grid-cols-[max-content] items-center justify-center justify-items-center gap-x-0 gap-y-4 text-sm md:grid-flow-col md:gap-x-6 md:gap-y-0">
             {footerLinks.map((link, index) => (
-              <li key={index} className="underline decoration-black underline-offset-1 ">
+              <li key={index}>
                 <a href={link.url}>{link.title}</a>
               </li>
             ))}
@@ -92,7 +92,7 @@ export const Footer4 = (props: Footer4Props) => {
 export const Footer4Defaults: Footer4Props = {
   logo: {
     url: "#",
-    src: "/PM 04 v2.svg",
+    src: "/PM 04 v2.webp",
     alt: "Logo image",
   },
   columnLinks: [

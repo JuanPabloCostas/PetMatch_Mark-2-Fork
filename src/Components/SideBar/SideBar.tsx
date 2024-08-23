@@ -54,7 +54,14 @@ export default function Sidebar() {
   const handleShowImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      if (file.size > 8 * 1024 * 1024 || !file.type.startsWith("image/")) {
+        alert("El archivo debe ser una imagen y no superar los 8MB");
+        setImageUrl(null);
+        e.target.value = "";
+        return;
+      }
       setImageUrl(URL.createObjectURL(file));
+      e.target.value = "";
     }
   };
 
@@ -122,11 +129,13 @@ export default function Sidebar() {
   }, [isLoading, onClose]);
 
   return (
-    <nav className="xl:h-screen shadow-xl xl:w-fit w-full flex lg:flex-col p-4 shadow">
+    <nav className="xl:h-screen xl:w-fit w-full flex lg:flex-col p-4 flex-row" style={{
+      boxShadow: '1px 0 6px rgba(0, 0, 0, 0.05)'
+    }}>
       <div className="flex flex-col justify-between h-full w-full">
         <div className="flex xl:flex-col xl:gap-6 w-full justify-between flex-row items-center">
           <Image
-            src="/ZORRO1.svg"
+            src="/ZORRO1.webp"
             width={50}
             height={50}
             alt="Logo"
@@ -191,7 +200,7 @@ export default function Sidebar() {
           </div>
         </div>
 
-        <div className="p-2 mt-auto">
+        <div className="mt-auto">
           <SignedIn>
             <UserButton />
           </SignedIn>
@@ -200,7 +209,7 @@ export default function Sidebar() {
           </SignedOut>
         </div>
 
-        <Modal isOpen={isOpen} onClose={onClose} className="p-2" size="2xl">
+        <Modal isOpen={isOpen} onClose={onClose} className="p-2" size="lg">
           <ModalContent className="max-h-[90vh] overflow-auto">
             <form onSubmit={handleSubmit} className="flex flex-col h-full">
               <Tabs aria-label="Options">
@@ -219,7 +228,7 @@ export default function Sidebar() {
                       </Button>
                     </CardHeader>
                     <CardBody>
-                      <div className="bg-zinc-500 h-64 w-full relative rounded-t-large flex justify-center items-center">
+                      <div className="h-64 w-full relative rounded-t-large flex justify-center items-center">
                         {imageUrl && (
                           <div className="h-full w-full flex items-center justify-center">
                             <Image

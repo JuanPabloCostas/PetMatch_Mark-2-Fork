@@ -61,7 +61,7 @@ export default function Profile() {
                 id={post.id}
                 urlImage={post.urlImage}
                 avatar={post.avatar}
-                user={post.user}
+                username={post.user}
                 content={post.content}
                 race={post.race}
                 size={post.size}
