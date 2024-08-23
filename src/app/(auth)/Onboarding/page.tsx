@@ -38,23 +38,23 @@ const Onboarding: React.FC = () => {
   const { user } = useUser();
   const router = useRouter();
 
-  useEffect(() => {
-    const checkUserStatus = async () => {
-      if (user && user.emailAddresses[0].emailAddress) {
-        try {
-          const email = user.emailAddresses[0].emailAddress;
-          const userStatus = await getUserStatus(email);
-          if (userStatus && userStatus.onboarded) {
-            router.push('/user/PrincipalPage');
-          }
-        } catch (error) {
-          console.error("Error fetching user status:", error);
-        }
-      }
-    };
+  // useEffect(() => {
+  //   const checkUserStatus = async () => {
+  //     if (user && user.emailAddresses[0].emailAddress) {
+  //       try {
+  //         const email = user.emailAddresses[0].emailAddress;
+  //         const userStatus = await getUserStatus(email);
+  //         if (userStatus && userStatus.onboarded) {
+  //           router.push('/user/PrincipalPage');
+  //         }
+  //       } catch (error) {
+  //         console.error("Error fetching user status:", error);
+  //       }
+  //     }
+  //   };
 
-    checkUserStatus();
-  }, [user, router]);
+  //   checkUserStatus();
+  // }, [user, router]);
 
   const handleNextStep = () => {
     setStep((prevStep) => prevStep + 1);
