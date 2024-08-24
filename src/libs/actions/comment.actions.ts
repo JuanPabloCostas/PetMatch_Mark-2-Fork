@@ -42,14 +42,19 @@ export async function sendComment(
         const uploadResponse = await fetch("/api/uploadImage/community", {
           method: "POST",
           body: formData,
-        });
+        }).then((response) => response.json());
 
 
 
         alert("uploadResponse acabo");
+
+        alert(uploadResponse.message);
+        return false;
         if (!uploadResponse.ok) {
           alert("no se pudo subir la imagen");
-          const response = await uploadResponse.json();
+          const response = await uploadResponse.json().catch(() => ({
+            message: "Error al subir la imagen.",
+          }));
           alert(response.message);
           return false;
         }
