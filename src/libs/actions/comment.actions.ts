@@ -49,7 +49,7 @@ export async function sendComment(
           alert("Imagen subida correctamente. URL:" + url);
         } else {
           console.error("Error al subir la imagen. Estado:", uploadResponse.status);
-          alert("Error al subir la imagen. Estado:" + response);
+          alert("Error al subir la imagen. Estado:" + response.message);
           return false;
         }
       }
