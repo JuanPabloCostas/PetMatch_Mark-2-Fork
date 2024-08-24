@@ -29,6 +29,8 @@ export async function sendComment(
   ): Promise<boolean> {
     try {
       let imgUrl = "";
+
+      alert("Enviando comentario...");
   
       if (image) {
         const formData = new FormData();
