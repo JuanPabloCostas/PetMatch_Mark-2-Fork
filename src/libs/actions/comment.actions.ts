@@ -1,4 +1,4 @@
-import { formatImage } from "@/utils/fileHandlers";
+import Compressor from "compressorjs";
 
 // fetchChildrenComments.ts
 export async function fetchChildrenComments(id: string) {
@@ -35,45 +35,79 @@ export async function sendComment(
       alert("Enviando comentario...");
   
       if (image) {
-        const formData = new FormData();
-        formData.append("image", image);
+
+        new Compressor(image, {
+          quality: 0.6,
+          async success(result) {
+            const formData = new FormData();
+
+            formData.append("image", result);
+
+            const uploadResponse = await fetch("/api/uploadImage/community", {
+              method: "POST",
+              body: formData,
+            });
+
+            if (uploadResponse.ok) {
+              const { url } = await uploadResponse.json();
+              imgUrl = url;
+              console.log("Imagen subida correctamente. URL:", url);
+              alert("Imagen subida correctamente. URL:" + url);
+            } else {
+              const response = await uploadResponse.json().catch(() => ({
+                message: "Error al subir la imagen.",
+              }));
+              alert(response.message);
+              return false;
+            }
+            
+          },
+          error(err) {
+            alert(err.message);
+            console.error(err);
+          },
+        })
+        
+
+        // const formData = new FormData();
+        // formData.append("image", image);
 
 
-        alert("Subiendo imagen...");
+        // alert("Subiendo imagen...");
   
-        // Primera solicitud para subir la imagen al bucket de AWS
-        const uploadResponse = await fetch("/api/uploadImage/community", {
-          method: "POST",
-          body: formData,
-        });
+        // // Primera solicitud para subir la imagen al bucket de AWS
+        // const uploadResponse = await fetch("/api/uploadImage/community", {
+        //   method: "POST",
+        //   body: formData,
+        // });
 
 
 
-        alert("uploadResponse acabo");
+        // alert("uploadResponse acabo");
 
-        alert(uploadResponse.status);
+        // alert(uploadResponse.status);
         return false;
-        if (!uploadResponse.ok) {
-          alert("no se pudo subir la imagen");
-          const response = await uploadResponse.json().catch(() => ({
-            message: "Error al subir la imagen.",
-          }));
-          alert(response.message);
-          return false;
-        }
+        // if (!uploadResponse.ok) {
+        //   alert("no se pudo subir la imagen");
+        //   const response = await uploadResponse.json().catch(() => ({
+        //     message: "Error al subir la imagen.",
+        //   }));
+        //   alert(response.message);
+        //   return false;
+        // }
   
         
 
-        if (uploadResponse.ok) {
-          const { url } = await uploadResponse.json();
-          imgUrl = url;
-          console.log("Imagen subida correctamente. URL:", url);
-          alert("Imagen subida correctamente. URL:" + url);
-        } else {
-          console.error("Error al subir la imagen. Estado:", uploadResponse.status);
-          alert("Error al subir la imagen. Estado:");
-          return false;
-        }
+        // if (uploadResponse.ok) {
+        //   const { url } = await uploadResponse.json();
+        //   imgUrl = url;
+        //   console.log("Imagen subida correctamente. URL:", url);
+        //   alert("Imagen subida correctamente. URL:" + url);
+        // } else {
+        //   console.error("Error al subir la imagen. Estado:", uploadResponse.status);
+        //   alert("Error al subir la imagen. Estado:");
+        //   return false;
+        // }
       }
 
       alert("Comentario enviado correctamente.");
