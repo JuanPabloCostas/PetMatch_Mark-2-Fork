@@ -45,25 +45,25 @@ export async function sendComment(
         });
 
 
-        const response = await uploadResponse.json();
 
         alert("uploadResponse acabo");
         if (!uploadResponse.ok) {
           alert("no se pudo subir la imagen");
+          const response = await uploadResponse.json();
           alert(response.message);
           return false;
         }
   
         
 
-        if (response.status === 200) {
+        if (uploadResponse.ok) {
           const { url } = await uploadResponse.json();
           imgUrl = url;
           console.log("Imagen subida correctamente. URL:", url);
           alert("Imagen subida correctamente. URL:" + url);
         } else {
           console.error("Error al subir la imagen. Estado:", uploadResponse.status);
-          alert("Error al subir la imagen. Estado:" + response.message);
+          alert("Error al subir la imagen. Estado:");
           return false;
         }
       }
