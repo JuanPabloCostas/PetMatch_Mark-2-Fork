@@ -8,6 +8,10 @@ export async function GET(request: NextRequest, { params }: any) {
       where: {
         id: id,
       },
+      include: {
+        user: true,
+        animal: true,
+      },
     });
     return NextResponse.json(post);
   } catch (error) {
