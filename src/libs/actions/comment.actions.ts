@@ -43,6 +43,12 @@ export async function sendComment(
           method: "POST",
           body: formData,
         });
+
+        alert("uploadResponse acabo");
+        if (!uploadResponse.ok) {
+          alert("no se pudo subir la imagen");
+          return false;
+        }
   
         const response = await uploadResponse.json();
 
