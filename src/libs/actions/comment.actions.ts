@@ -40,14 +40,16 @@ export async function sendComment(
           body: formData,
         });
   
-        if (uploadResponse.ok) {
+        const response = await uploadResponse.json();
+
+        if (response.status === 200) {
           const { url } = await uploadResponse.json();
           imgUrl = url;
           console.log("Imagen subida correctamente. URL:", url);
           alert("Imagen subida correctamente. URL:" + url);
         } else {
           console.error("Error al subir la imagen. Estado:", uploadResponse.status);
-          alert("Error al subir la imagen. Estado:" + uploadResponse);
+          alert("Error al subir la imagen. Estado:" + response);
           return false;
         }
       }
