@@ -44,13 +44,17 @@ export async function sendComment(
           body: formData,
         });
 
+
+        const response = await uploadResponse.json();
+
         alert("uploadResponse acabo");
         if (!uploadResponse.ok) {
           alert("no se pudo subir la imagen");
+          alert(response.message);
           return false;
         }
   
-        const response = await uploadResponse.json();
+        
 
         if (response.status === 200) {
           const { url } = await uploadResponse.json();
