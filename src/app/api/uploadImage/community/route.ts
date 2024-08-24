@@ -37,3 +37,11 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ code: 500, message: "ERROR" });
   }
 }
+
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: '10mb', // Set this according to your needs
+    },
+  },
+};

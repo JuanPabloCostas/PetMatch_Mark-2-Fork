@@ -36,20 +36,8 @@ export async function sendComment(
   
       if (image) {
         const formData = new FormData();
-        // formData.append("image", image);
+        formData.append("image", image);
 
-        const Body = (await image.arrayBuffer()) as Buffer;
-
-        const resizedImage = await formatImage(Body);
-
-        if (!resizedImage) {
-          console.log("Error resizing image");
-          alert("Error resizing image");
-          return false;
-        }
-
-        const resizedImageBlob = new Blob([resizedImage], { type: 'image/webp' });
-        formData.append("image", resizedImageBlob);
 
         alert("Subiendo imagen...");
   
