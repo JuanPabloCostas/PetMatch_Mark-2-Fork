@@ -47,9 +47,6 @@ const AddPost: React.FC<AddPostProps> = ({ onPostAdded, parentId }) => {
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-
-
-
     if (file) {
       setLoading(true);
       setImage(file);

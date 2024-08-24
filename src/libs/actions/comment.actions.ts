@@ -44,8 +44,11 @@ export async function sendComment(
           const { url } = await uploadResponse.json();
           imgUrl = url;
           console.log("Imagen subida correctamente. URL:", url);
+          alert("Imagen subida correctamente. URL:" + url);
         } else {
           console.error("Error al subir la imagen. Estado:", uploadResponse.status);
+          alert("Error al subir la imagen. Estado:" + uploadResponse);
+          return false;
         }
       }
   

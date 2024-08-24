@@ -104,7 +104,7 @@ const Community: React.FC = () => {
   return (
     <>
       <div id="modal" className={`modal ${ isOpen ? "is-active" : ""}`} onClick={() => setisOpen(false)} >
-          <img src={modalImage} className="modal-content" alt="" />
+          <img src={modalImage} className="modal-content" alt="" onClick={(e) => e.stopPropagation()} /> 
       </div>
       <nav className="backdrop-blur-2xl shadow-md z-50 flex justify-between items-center w-full fixed top-0 p-2">
         <div className="flex items-center gap-8">
