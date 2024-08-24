@@ -17,9 +17,10 @@ interface CommunityCardProps {
   handleUnfavorite: (id: string) => void;
   handleAddComment: (id: string) => void;
   handleReply: (id: string) => void;
+  handleOpen: (id?: string) => void;
 }
 
-const CommunityCard: React.FC<CommunityCardProps> = ({ post, handleFavorite, handleUnfavorite, handleAddComment, handleReply }) => {
+const CommunityCard: React.FC<CommunityCardProps> = ({ post, handleFavorite, handleUnfavorite, handleAddComment, handleReply, handleOpen }) => {
   const [isLiked, setIsLiked] = useState(false);
 
   const toggleFavorite = () => {
@@ -64,8 +65,9 @@ const CommunityCard: React.FC<CommunityCardProps> = ({ post, handleFavorite, han
                   alt="Imagen del usuario"
                   width={600}
                   height={300}
-                  className="rounded-md"
+                  radius='lg'
                   style={{ maxHeight: '450px', objectFit: 'cover' }}
+                  onClick={() => handleOpen(post.image)}
                 />
               </div>
             )}
