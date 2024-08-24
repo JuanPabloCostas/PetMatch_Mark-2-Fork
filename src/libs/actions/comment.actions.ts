@@ -35,6 +35,8 @@ export async function sendComment(
       if (image) {
         const formData = new FormData();
         formData.append("image", image);
+
+        alert("Subiendo imagen...");
   
         // Primera solicitud para subir la imagen al bucket de AWS
         const uploadResponse = await fetch("/api/uploadImage/community", {
