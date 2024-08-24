@@ -55,6 +55,8 @@ export async function sendComment(
           return false;
         }
       }
+
+      alert("Comentario enviado correctamente.");
   
       // Segunda solicitud para enviar el comentario
       const postFormData = {
