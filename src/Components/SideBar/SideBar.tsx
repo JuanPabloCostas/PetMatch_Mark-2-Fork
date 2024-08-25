@@ -29,7 +29,7 @@ export default function Sidebar() {
       className="xl:h-screen shadow-xl xl:w-fit w-full flex justify-between lg:flex-col p-4"
       style={{ boxShadow: "1px 0 6px rgba(0, 0, 0, 0.05)" }}
     >
-      <div className="flex xl:flex-col xl:gap-4 w-full justify-between flex-row">
+      <div className="flex xl:h-full xl:flex-col xl:gap-4 w-full justify-between flex-row">
         <Image
           src="/ZORRO_SIN1.webp"
           width={60}
@@ -37,7 +37,7 @@ export default function Sidebar() {
           alt="Logo"
           className="hidden xl:block -mt-6"
         />
-        <div className="flex flex-row gap-10 w-full xl:flex-col xl:gap-8 xl:mt-4 lg:gap-6 lg:mt-2">
+        <div className="flex flex-row gap-10 w-full justify-evenly xl:h-full xl:flex-col xl:gap-8 xl:mt-4 lg:gap-6 lg:mt-2 xl:text-center xl:items-center">
           <Tooltip content="Recomendaciones" placement="right" size="sm">
             <Button
               variant="light"
@@ -89,15 +89,17 @@ export default function Sidebar() {
               <span className="material-symbols-outlined">add_a_photo</span>
             </Button>
           </Tooltip>
+          <div className="mt-auto">
+            <SignedIn>
+              <UserButton />
+            </SignedIn>
+            <SignedOut>
+              <SignInButton />
+            </SignedOut>
+          </div>
         </div>
-
       </div>
-      <SignedIn>
-        <UserButton />
-      </SignedIn>
-      <SignedOut>
-        <SignInButton />
-      </SignedOut>
+
       <FormModal isOpen={isOpen} onClose={onClose} />
     </nav>
   );
