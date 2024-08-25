@@ -20,9 +20,9 @@ export async function POST(request: NextRequest) {
     const newComment = await prisma.comment.create({
       data: {
         text,
-        communityId: communityId || null,
-        userId: userId || null,
-        parentId: parentId || null,
+        communityId: communityId || null, 
+        userId: userId || null,          
+        parentId: parentId || null,    
         imgUrl: imgUrl || null,
         createdAt: createdAt, // Usamos el createdAt enviado desde la solicitud
       },
@@ -78,12 +78,12 @@ export async function GET(request: NextRequest) {
         },
       },
       orderBy: {
-        createdAt: 'desc',
+        createdAt: 'desc', 
       },
     });
 
-    // Calcula la diferencia de tiempo para cada comentario
-    const commentsWithTimeDiff = comments.map(comment => {
+      // Calcula la diferencia de tiempo para cada comentario
+      const commentsWithTimeDiff = comments.map(comment => {
       const createdAtDate = new Date(comment.createdAt);
       const timeDiff = currentDateLocal.getTime() - createdAtDate.getTime();
 
@@ -96,28 +96,18 @@ export async function GET(request: NextRequest) {
 
       let timeDifference: string;
 
-      // if (years > 0) {
-      //   timeDifference = `${years} año${years > 1 ? 's' : ''}`;
-      // } else if (months > 0) {
-      //   timeDifference = `${months} mes${months > 1 ? 'es' : ''}`;
-      // } else if (days > 0) {
-      //   timeDifference = `${days} día${days > 1 ? 's' : ''}`;
-      // } else if (hours > 0) {
-      //   timeDifference = `${hours} hora${hours > 1 ? 's' : ''}`;
-      // } else if (minutes > 0) {
-      //   timeDifference = `${minutes} minuto${minutes > 1 ? 's' : ''}`;
-      // } else {
-      //   timeDifference = `${seconds} segundo${seconds > 1 ? 's' : ''}`;
-      // }
-
-      if (years > 0 || months > 0 || days > 0) {
+      if (years > 0) {
+        timeDifference = `${years} año${years > 1 ? 's' : ''}`;
+      } else if (months > 0) {
+        timeDifference = `${months} mes${months > 1 ? 'es' : ''}`;
+      } else if (days > 0) {
         timeDifference = `${days} día${days > 1 ? 's' : ''}`;
       } else if (hours > 0) {
-        timeDifference = `${hours}h`;
+        timeDifference = `${hours} hora${hours > 1 ? 's' : ''}`;
       } else if (minutes > 0) {
-        timeDifference = `${minutes}m`;
+        timeDifference = `${minutes} minuto${minutes > 1 ? 's' : ''}`;
       } else {
-        timeDifference = `${seconds}s`;
+        timeDifference = `${seconds} segundo${seconds > 1 ? 's' : ''}`;
       }
 
       return {
