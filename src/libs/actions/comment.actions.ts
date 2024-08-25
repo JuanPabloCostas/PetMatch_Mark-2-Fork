@@ -39,46 +39,29 @@ export async function sendComment(
 
   // Convertir la fecha a formato ISO 8601
   const formattedDate = currentDateLocal.toISOString();
-  
+
   try {
     let imgUrl = "";
 
-    // If there's an image, compress and upload it
     if (image) {
-      // Wrap the Compressor logic inside a Promise
-      imgUrl = await new Promise<string>((resolve, reject) => {
-        new Compressor(image, {
-          quality: 0.2,
-          async success(result) {
-            try {
-              const formData = new FormData();
-              formData.append("image", result);
+      const formData = new FormData();
+      formData.append("image", image);
 
-              const uploadResponse = await fetch("/api/uploadImage/community", {
-                method: "POST",
-                body: formData,
-              });
-
-              if (uploadResponse.ok) {
-                const { url } = await uploadResponse.json();
-                resolve(url);
-                console.log("Imagen subida correctamente. URL:", url);
-              } else {
-                const response = await uploadResponse.json().catch(() => ({
-                  message: "Error al subir la imagen.",
-                }));
-                reject(new Error(response.message));
-              }
-            } catch (error) {
-              reject(error);
-            }
-          },
-          error(err) {
-            console.error(err);
-            reject(err);
-          },
-        });
+      // Primera solicitud para subir la imagen al bucket de AWS
+      const uploadResponse = await fetch("/api/uploadImage/community", {
+        method: "POST",
+        body: formData,
       });
+
+      if (uploadResponse.ok) {
+        const { url } = await uploadResponse.json();
+        imgUrl = url;
+        alert("Imagen subida correctamente. URL:" + url);
+      } else {
+        console.error("Error al subir la imagen. Estado:", uploadResponse.status);
+        alert("Error al subir la imagen. Estado:" + uploadResponse);
+        return false;
+      }
     }
 
     // Segunda solicitud para enviar el comentario
@@ -89,23 +72,20 @@ export async function sendComment(
       createdAt: formattedDate, // Utilizamos la fecha formateada
     };
 
-    const postResponse = await fetch(
-      parentId ? `/api/comments/children?id=${parentId}` : "/api/comments",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(postFormData),
-      }
-    );
+    const postResponse = await fetch(parentId ? `/api/comments/children?id=${parentId}` : "/api/comments", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(postFormData),
+    });
 
-    if (postResponse.ok) {
-      console.log("Comentario enviado correctamente.");
+    if (postResponse.status === 200) {
       return true;
     } else {
-      console.error("Error al enviar el comentario. Estado:", postResponse.status);
-      return false;
+      const errorData = await postResponse.json();
+      console.error("Error al enviar el comentario. Estado:", postResponse.status, "Mensaje:", errorData.message);
+      return false; // Devuelve false en caso de error
     }
 
   } catch (error) {
@@ -113,7 +93,6 @@ export async function sendComment(
     return false;
   }
 }
-
 
   
   
