@@ -2,6 +2,7 @@
 
 import React, { useState, useRef } from "react";
 import Image from "next/image";
+
 import {
   Modal,
   ModalContent,
@@ -91,7 +92,6 @@ export default function FormModal({ isOpen, onClose }: FormModalProps) {
       alert("Por favor, selecciona una imagen antes de enviar.");
       return;
     }
-
     setIsLoading(true);
 
     try {

@@ -90,6 +90,7 @@ export default function Sidebar() {
             </Button>
           </Tooltip>
         </div>
+
       </div>
       <SignedIn>
         <UserButton />
