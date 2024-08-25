@@ -24,125 +24,83 @@ export async function fetchChildrenComments(id: string) {
 }
 
 export async function sendComment(
-    commentText: string,
-    image: File | null,
-    userId: string,
-    parentId?: string
-  ): Promise<boolean> {
-    try {
-      let imgUrl = "";
+  commentText: string,
+  image: File | null,
+  userId: string,
+  parentId?: string
+): Promise<boolean> {
+  try {
+    let imgUrl = "";
 
-      // alert("Enviando comentario...");
-  
-      if (image) {
-
+    // If there's an image, compress and upload it
+    if (image) {
+      // Wrap the Compressor logic inside a Promise
+      imgUrl = await new Promise<string>((resolve, reject) => {
         new Compressor(image, {
           quality: 0.2,
           async success(result) {
-            const formData = new FormData();
+            try {
+              const formData = new FormData();
+              formData.append("image", result);
 
-            formData.append("image", result);
+              const uploadResponse = await fetch("/api/uploadImage/community", {
+                method: "POST",
+                body: formData,
+              });
 
-            const uploadResponse = await fetch("/api/uploadImage/community", {
-              method: "POST",
-              body: formData,
-            });
-
-            if (uploadResponse.ok) {
-              const { url } = await uploadResponse.json();
-              imgUrl = url;
-              console.log("Imagen subida correctamente. URL:", url);
-              // alert("Imagen subida correctamente. URL:" + url);
-            } else {
-              const response = await uploadResponse.json().catch(() => ({
-                message: "Error al subir la imagen.",
-              }));
-              // alert(response.message);
-              return false;
+              if (uploadResponse.ok) {
+                const { url } = await uploadResponse.json();
+                resolve(url);
+                console.log("Imagen subida correctamente. URL:", url);
+              } else {
+                const response = await uploadResponse.json().catch(() => ({
+                  message: "Error al subir la imagen.",
+                }));
+                reject(new Error(response.message));
+              }
+            } catch (error) {
+              reject(error);
             }
-            
           },
           error(err) {
-            alert(err.message);
             console.error(err);
+            reject(err);
           },
-        })
-        
+        });
+      });
+    }
 
-        // const formData = new FormData();
-        // formData.append("image", image);
+    // Segunda solicitud para enviar el comentario
+    const postFormData = {
+      text: commentText,
+      imgUrl,
+      userId,
+    };
 
-
-        // alert("Subiendo imagen...");
-  
-        // // Primera solicitud para subir la imagen al bucket de AWS
-        // const uploadResponse = await fetch("/api/uploadImage/community", {
-        //   method: "POST",
-        //   body: formData,
-        // });
-
-
-
-        // alert("uploadResponse acabo");
-
-        // alert(uploadResponse.status);
-        // return false;
-        // if (!uploadResponse.ok) {
-        //   alert("no se pudo subir la imagen");
-        //   const response = await uploadResponse.json().catch(() => ({
-        //     message: "Error al subir la imagen.",
-        //   }));
-        //   alert(response.message);
-        //   return false;
-        // }
-  
-        
-
-        // if (uploadResponse.ok) {
-        //   const { url } = await uploadResponse.json();
-        //   imgUrl = url;
-        //   console.log("Imagen subida correctamente. URL:", url);
-        //   alert("Imagen subida correctamente. URL:" + url);
-        // } else {
-        //   console.error("Error al subir la imagen. Estado:", uploadResponse.status);
-        //   alert("Error al subir la imagen. Estado:");
-        //   return false;
-        // }
-      }
-
-      if (!image) {
-        alert("No se ha subido ninguna imagen.");
-      }
-
-      alert("Comentario enviado correctamente.");
-  
-      // Segunda solicitud para enviar el comentario
-      const postFormData = {
-        text: commentText,
-        imgUrl,
-        userId,
-      };
-  
-      const postResponse = await fetch(parentId ? `/api/comments/children?id=${parentId}` : "/api/comments", {
+    const postResponse = await fetch(
+      parentId ? `/api/comments/children?id=${parentId}` : "/api/comments",
+      {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(postFormData),
-      });
-  
-      if (postResponse.ok) {
-        console.log("Comentario enviado correctamente.");
-        return true;
-      } else {
-        console.error("Error al enviar el comentario. Estado:", postResponse.status);
-        return false;
       }
-    } catch (error) {
-      console.error("Error al enviar el comentario:", error);
+    );
+
+    if (postResponse.ok) {
+      console.log("Comentario enviado correctamente.");
+      return true;
+    } else {
+      console.error("Error al enviar el comentario. Estado:", postResponse.status);
       return false;
     }
+  } catch (error) {
+    console.error("Error al enviar el comentario:", error);
+    return false;
   }
+}
+
   
   
   
