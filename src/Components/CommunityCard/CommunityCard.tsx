@@ -35,7 +35,7 @@ const CommunityCard: React.FC<CommunityCardProps> = ({ post, handleFavorite, han
   };
 
   return (
-    <Card className="px-4 py-2 w-full flex flex-row gap-2" radius="none" shadow="none">
+    <Card className="px-1 sm:px-4 py-2 w-full flex flex-row gap-2" radius="none" shadow="none">
       {/* Div del Avatar */}
       <div className="flex items-start h-full">
         <Avatar src={post.avatar} size="md" />
@@ -43,12 +43,14 @@ const CommunityCard: React.FC<CommunityCardProps> = ({ post, handleFavorite, han
 
       {/* Div que contiene CardHeader, CardBody y CardFooter */}
       <div className="flex flex-col flex-grow h-full">
-        <CardHeader className="flex -mt-3">
-          <div className="flex flex-row gap-4 w-full justify-between">
-            <div className="flex flex-row gap-4 items-center">
-              <span className="font-bold">{post.fullname}</span>
+        <CardHeader className="flex -mt-3 p-1 sm:p-3">
+          <div className="flex flex-row w-full justify-between">
+            <div className="flex flex-row gap-1 xl:gap-4 items-center">
+              <span className="font-bold min-w-fit">{post.fullname.split(" ")[0] + " " + post.fullname.split(" ")[1]}</span>
+              <span className="md:hidden">·</span>
               <span className="font-light text-sm">@{post.username}</span>
-              <span className="font-light text-sm">Hace {post.timeDifference}</span> {/* Mostrar la diferencia de tiempo */}
+              <span className="md:hidden">·</span>
+              <span className="font-light text-sm">{post.timeDifference}</span> {/* Mostrar la diferencia de tiempo */}
             </div>
             <Button isIconOnly className="bg-transparent" size="sm">
               <span className="material-symbols-outlined text-sm">more_horiz</span>
