@@ -37,7 +37,7 @@ export async function sendComment(
       if (image) {
 
         new Compressor(image, {
-          quality: 0.6,
+          quality: 0.2,
           async success(result) {
             const formData = new FormData();
 
