@@ -110,6 +110,10 @@ export async function sendComment(
         // }
       }
 
+      if (!image) {
+        alert("No se ha subido ninguna imagen.");
+      }
+
       alert("Comentario enviado correctamente.");
   
       // Segunda solicitud para enviar el comentario
