@@ -32,7 +32,7 @@ export async function sendComment(
     try {
       let imgUrl = "";
 
-      alert("Enviando comentario...");
+      // alert("Enviando comentario...");
   
       if (image) {
 
@@ -52,12 +52,12 @@ export async function sendComment(
               const { url } = await uploadResponse.json();
               imgUrl = url;
               console.log("Imagen subida correctamente. URL:", url);
-              alert("Imagen subida correctamente. URL:" + url);
+              // alert("Imagen subida correctamente. URL:" + url);
             } else {
               const response = await uploadResponse.json().catch(() => ({
                 message: "Error al subir la imagen.",
               }));
-              alert(response.message);
+              // alert(response.message);
               return false;
             }
             
@@ -86,7 +86,7 @@ export async function sendComment(
         // alert("uploadResponse acabo");
 
         // alert(uploadResponse.status);
-        return false;
+        // return false;
         // if (!uploadResponse.ok) {
         //   alert("no se pudo subir la imagen");
         //   const response = await uploadResponse.json().catch(() => ({
