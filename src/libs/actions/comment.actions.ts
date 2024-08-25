@@ -29,6 +29,17 @@ export async function sendComment(
   userId: string,
   parentId?: string
 ): Promise<boolean> {
+  const currentDateUTC = new Date();
+
+  // Offset en minutos para la zona horaria de México (restar 6 horas)
+  const offset = -6 * 60;
+
+  // Fecha y hora local en México restando el offset
+  const currentDateLocal = new Date(currentDateUTC.getTime() + offset * 60000);
+
+  // Convertir la fecha a formato ISO 8601
+  const formattedDate = currentDateLocal.toISOString();
+  
   try {
     let imgUrl = "";
 
@@ -75,6 +86,7 @@ export async function sendComment(
       text: commentText,
       imgUrl,
       userId,
+      createdAt: formattedDate, // Utilizamos la fecha formateada
     };
 
     const postResponse = await fetch(
@@ -95,11 +107,13 @@ export async function sendComment(
       console.error("Error al enviar el comentario. Estado:", postResponse.status);
       return false;
     }
+
   } catch (error) {
     console.error("Error al enviar el comentario:", error);
     return false;
   }
 }
+
 
   
   

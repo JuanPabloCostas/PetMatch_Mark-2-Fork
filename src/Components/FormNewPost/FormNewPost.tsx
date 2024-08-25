@@ -187,6 +187,7 @@ export default function FormNewPost({ onFormDataChange }: FormNewPostProps) {
   ]);
 
   return (
+
     <Card className="bg-transparent">
       <CardHeader className="flex w-full">
         <h1 className="text-xl w-full text-center">Haz una nueva publicación</h1>
