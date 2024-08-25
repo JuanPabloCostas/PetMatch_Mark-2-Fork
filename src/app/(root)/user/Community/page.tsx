@@ -7,6 +7,7 @@ import { useUser } from "@clerk/nextjs";
 import RightSidebar from "@/Components/RightSideBar/RightSideBar";
 import { Button, Divider } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 interface FormattedPost {
   id: string;
@@ -14,8 +15,8 @@ interface FormattedPost {
   username: string;
   text: string;
   avatar: string;
-  timeDifference: string; 
-  image?: string; 
+  timeDifference: string;
+  image?: string;
   comments: number;
   likes: number;
 }
@@ -57,12 +58,12 @@ const Community: React.FC = () => {
         const formattedPosts: FormattedPost[] = commentsArray.map((comment: any) => {
           return {
             id: comment.id,
-            fullname: comment.user?.fullname || "Anonymous", 
-            username: comment.user?.username || "anonymous", 
-            text: comment.text, 
+            fullname: comment.user?.fullname || "Anonymous",
+            username: comment.user?.username || "anonymous",
+            text: comment.text,
             avatar: comment.user?.photoUrl || user?.imageUrl || "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp",
             image: comment.imgUrl || "",
-            timeDifference: comment.timeDifference || "Unknown", 
+            timeDifference: comment.timeDifference || "Unknown",
             comments: comment.childrenComments?.length || 0,
             likes: 0,
           };
@@ -112,6 +113,13 @@ const Community: React.FC = () => {
       </div>
       <nav className="backdrop-blur-2xl shadow-md z-50 flex justify-between items-center w-full fixed top-0 p-2">
         <div className="flex items-center gap-8">
+          <Image
+            src="/ZORRO_SIN1.webp"
+            width={50}
+            height={50}
+            alt="Logo"
+            className="xl:hidden -mt-6"
+          />
           <h1 className="lg:text-4xl text-xl font-bold">Comunidad</h1>
           <Button
             onClick={handleScrollToTop}
