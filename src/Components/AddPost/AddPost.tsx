@@ -135,7 +135,20 @@ const AddPost: React.FC<AddPostProps> = ({ onPostAdded, parentId }) => {
                 id="file-upload"
                 type="file"
                 accept="image/*"
-                capture  // This enables the option to take a picture
+                className="hidden m-0 h-14 hover:cursor-pointer absolute top-0 left-0 w-14"
+                disabled={loading}
+                onChange={handleImageUpload}
+              />
+            </Button>
+            <Button isIconOnly className="bg-transparent p-0 relative cursor-auto">
+              <label htmlFor="file-upload" className="">
+                <span className="material-symbols-outlined cursor-pointer">camera</span>
+              </label>
+              <input
+                id="file-upload"
+                type="file"
+                accept="image/*"
+                capture
                 className="hidden m-0 h-14 hover:cursor-pointer absolute top-0 left-0 w-14"
                 disabled={loading}
                 onChange={handleImageUpload}
