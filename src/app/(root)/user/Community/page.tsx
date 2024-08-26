@@ -16,8 +16,8 @@ interface FormattedPost {
   username: string;
   text: string;
   avatar: string;
-  timeDifference: string;
-  image?: string;
+  timeDifference: string; 
+  image?: string; 
   comments: number;
   likes: number;
 }
@@ -60,12 +60,12 @@ const Community: React.FC = () => {
         const formattedPosts: FormattedPost[] = commentsArray.map((comment: any) => {
           return {
             id: comment.id,
-            fullname: comment.user?.fullname || "Anonymous",
-            username: comment.user?.username || "anonymous",
-            text: comment.text,
+            fullname: comment.user?.fullname || "Anonymous", 
+            username: comment.user?.username || "anonymous", 
+            text: comment.text, 
             avatar: comment.user?.photoUrl || user?.imageUrl || "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp",
             image: comment.imgUrl || "",
-            timeDifference: comment.timeDifference || "Unknown",
+            timeDifference: comment.timeDifference || "Unknown", 
             comments: comment.childrenComments?.length || 0,
             likes: 0,
           };
