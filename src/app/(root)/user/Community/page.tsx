@@ -8,6 +8,7 @@ import RightSidebar from "@/Components/RightSideBar/RightSideBar";
 import { Button, Divider } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import Loading from "@/Components/Loading/Loading";
 
 interface FormattedPost {
   id: string;
@@ -27,6 +28,7 @@ const Community: React.FC = () => {
   const router = useRouter();
   const [isOpen, setisOpen] = useState(false);
   const [modalImage, setmodalImage] = useState<string | undefined>("");
+  const [loading, setloading] = useState(false)
 
   const handleOpen = (imageUrl?: string) => {
     setmodalImage(imageUrl);
@@ -106,8 +108,21 @@ const Community: React.FC = () => {
     console.log(`Responder al post ${id}`);
   };
 
+  useEffect(() => {
+    if (posts.length > 0) {
+      setloading(false)
+    }
+
+    if (posts.length === 0) {
+      setloading(true)
+    }
+    
+  }, [posts])
+  
+
   return (
     <>
+      <Loading enabled={loading} fixed={true} />
       <div id="modal" className={`modal ${isOpen ? "is-active" : ""}`} onClick={() => setisOpen(false)}>
         <img src={modalImage} className="modal-content" alt="" onClick={(e) => e.stopPropagation()} />
       </div>
@@ -132,7 +147,7 @@ const Community: React.FC = () => {
       </nav>
       <div className="flex flex-row mt-11">
         <div className="w-full flex flex-col">
-          <div className="flex flex-col border-2 m-auto w-3/4 max-lg:w-full">
+          <div className="flex flex-col border-2 mx-auto w-3/4 max-lg:w-full">
             <AddPost onPostAdded={fetchComments} />
             <Divider />
             {posts.map((post, index) => {
