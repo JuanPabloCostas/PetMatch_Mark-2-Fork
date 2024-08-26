@@ -8,6 +8,7 @@ import RightSidebar from "@/Components/RightSideBar/RightSideBar";
 import { Button, Divider } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import Loading from "@/Components/Loading/Loading";
 
 interface FormattedPost {
   id: string;
@@ -15,8 +16,8 @@ interface FormattedPost {
   username: string;
   text: string;
   avatar: string;
-  timeDifference: string; 
-  image?: string; 
+  timeDifference: string;
+  image?: string;
   comments: number;
   likes: number;
 }
@@ -27,6 +28,7 @@ const Community: React.FC = () => {
   const router = useRouter();
   const [isOpen, setisOpen] = useState(false);
   const [modalImage, setmodalImage] = useState<string | undefined>("");
+  const [loading, setloading] = useState(false)
 
   const handleOpen = (imageUrl?: string) => {
     setmodalImage(imageUrl);
@@ -58,12 +60,12 @@ const Community: React.FC = () => {
         const formattedPosts: FormattedPost[] = commentsArray.map((comment: any) => {
           return {
             id: comment.id,
-            fullname: comment.user?.fullname || "Anonymous", 
-            username: comment.user?.username || "anonymous", 
-            text: comment.text, 
+            fullname: comment.user?.fullname || "Anonymous",
+            username: comment.user?.username || "anonymous",
+            text: comment.text,
             avatar: comment.user?.photoUrl || user?.imageUrl || "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp",
             image: comment.imgUrl || "",
-            timeDifference: comment.timeDifference || "Unknown", 
+            timeDifference: comment.timeDifference || "Unknown",
             comments: comment.childrenComments?.length || 0,
             likes: 0,
           };
@@ -106,8 +108,21 @@ const Community: React.FC = () => {
     console.log(`Responder al post ${id}`);
   };
 
+  useEffect(() => {
+    if (posts.length > 0) {
+      setloading(false)
+    }
+
+    if (posts.length === 0) {
+      setloading(true)
+    }
+    
+  }, [posts])
+  
+
   return (
     <>
+      <Loading enabled={loading} fixed={true} />
       <div id="modal" className={`modal ${isOpen ? "is-active" : ""}`} onClick={() => setisOpen(false)}>
         <img src={modalImage} className="modal-content" alt="" onClick={(e) => e.stopPropagation()} />
       </div>
@@ -132,7 +147,7 @@ const Community: React.FC = () => {
       </nav>
       <div className="flex flex-row mt-11">
         <div className="w-full flex flex-col">
-          <div className="flex flex-col border-2 m-auto w-3/4 max-lg:w-full">
+          <div className="flex flex-col border-2 mx-auto w-3/4 max-lg:w-full">
             <AddPost onPostAdded={fetchComments} />
             <Divider />
             {posts.map((post, index) => {
