@@ -105,6 +105,14 @@
   background-color: rgba(0,0,0,0.6); /* Black w/ opacity */
 }
 
+.post-card {
+  max-width: 20rem;
+  max-height: 20rem;
+  min-height: 16rem;
+  min-width: 16rem;
+  width: auto;
+}
+
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
