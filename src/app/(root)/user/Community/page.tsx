@@ -20,6 +20,7 @@ interface FormattedPost {
   image?: string; 
   comments: number;
   likes: number;
+  name?: string;
 }
 
 const Community: React.FC = () => {
@@ -68,6 +69,7 @@ const Community: React.FC = () => {
             timeDifference: comment.timeDifference || "Unknown", 
             comments: comment.childrenComments?.length || 0,
             likes: 0,
+            name: comment.user?.fullname.split(' ')[0] + " " + (comment.user?.fullname.split(' ').length > 1 ? comment.user?.fullname.split(' ')[1] : ''),
           };
         });
 
