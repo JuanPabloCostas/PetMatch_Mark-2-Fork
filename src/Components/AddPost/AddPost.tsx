@@ -148,7 +148,7 @@ const AddPost: React.FC<AddPostProps> = ({ onPostAdded, parentId }) => {
                 id="file-upload"
                 type="file"
                 accept="image/*"
-                capture
+                capture="environment"
                 className="hidden m-0 h-14 hover:cursor-pointer absolute top-0 left-0 w-14"
                 disabled={loading}
                 onChange={handleImageUpload}
