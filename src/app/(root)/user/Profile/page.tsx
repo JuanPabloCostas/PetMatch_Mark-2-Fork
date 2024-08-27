@@ -63,6 +63,7 @@ export default function Profile() {
               <span className="material-symbols-outlined">location_on</span>
               Arquitectura 9 Col.Industrial 76130, <br /> Santiago de Querétaro
             </div>
+
           </div>
           <div id="horarios" className="flex flex-col gap-4">
             <div className="flex items-center gap-2">
