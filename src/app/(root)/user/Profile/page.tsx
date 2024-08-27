@@ -1,7 +1,8 @@
 "use client";
 
-import React from "react";
-import { Button, Divider } from "@nextui-org/react";
+import React, { useState } from "react";
+import {Button, Card, CardBody, CardFooter, CardHeader, Divider, Image, Link} from "@nextui-org/react";
+import PostCard from "@/Components/PostCard/PostCard";
 import CustomPieChart from "@/Components/CustomPieChart/CustomPieChart";
 
 const chartData = [

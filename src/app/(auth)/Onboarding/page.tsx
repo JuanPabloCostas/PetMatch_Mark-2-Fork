@@ -1,25 +1,41 @@
 'use client'
-import { useState, useEffect } from "react";
-import { Button, Input, Textarea, Avatar, CircularProgress, Select, SelectItem, select, getKeyValue } from "@nextui-org/react";
+import React, { useState } from "react";
+import { Button, Input, Textarea, Avatar, CircularProgress, Select, SelectItem, CheckboxGroup, Checkbox } from "@nextui-org/react";
 import { FaArrowLeft } from "react-icons/fa";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
-import { getUserStatus } from "@/libs/actions/user.actions";
+
+
+interface scheduleItem {
+  day: string;
+  time: string;
+}
 
 interface FormData {
   fullname: string;
   username: string;
+  veterinaryClinicName: string;
+  veterinaryAddress: string;
   phoneNumber: string;
+  ageUserN: number
   ageUser: string;
-  ageUserN: number;
   experience: string;
-  experienceN: number;
   bio: string;
   photoUrl: string;
+  experienceN: number;
+  schedule: string;
 }
+
 
 interface ProfileFormProps {
   onNext: () => void;
+  formData: FormData;
+  setFormData: React.Dispatch<React.SetStateAction<FormData>>;
+}
+
+interface ScheduleFormProps {
+  onNext: () => void;
+  onBack: () => void;
   formData: FormData;
   setFormData: React.Dispatch<React.SetStateAction<FormData>>;
 }
@@ -36,6 +52,8 @@ const Onboarding: React.FC = () => {
   const [formData, setFormData] = useState<FormData>({
     fullname: "",
     username: "",
+    veterinaryClinicName: "",
+    veterinaryAddress: "",
     phoneNumber: "",
     ageUser: "",
     ageUserN: 0,
@@ -43,9 +61,8 @@ const Onboarding: React.FC = () => {
     experienceN: 0,
     bio: "",
     photoUrl: "",
+    schedule: "",
   });
-  const { user } = useUser();
-  const router = useRouter();
 
   // useEffect(() => {
   //   const checkUserStatus = async () => {
@@ -87,6 +104,14 @@ const Onboarding: React.FC = () => {
           />
         )}
         {step === 2 && (
+          <ScheduleForm
+            onNext={handleNextStep}
+            onBack={handlePreviousStep}
+            formData={formData}
+            setFormData={setFormData}
+          />
+        )}
+        {step === 3 && (
           <UploadProfilePicture
             onBack={handlePreviousStep}
             formData={formData}
@@ -101,10 +126,14 @@ const Onboarding: React.FC = () => {
 const ProfileForm: React.FC<ProfileFormProps> = ({ onNext, formData, setFormData }) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    setFormData((prevData) => {
+      const newData = {
+        ...prevData,
+        [name]: name === 'ageUser' || name === 'experienceN' ? Number(value) : value,
+      };
+      console.log('Updated formData in ProfileForm:', newData);
+      return newData;
+    });
   };
 
   return (
@@ -120,7 +149,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ onNext, formData, setFormData
               placeholder="Escribe tu nombre completo"
               variant="bordered"
               className="w-full"
-              value={formData.fullname}
+              value={formData.fullname || ''} // Siempre como string
               onChange={handleChange}
             />
             <Input
@@ -130,11 +159,31 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ onNext, formData, setFormData
               placeholder="Escribe tu nombre de usuario"
               variant="bordered"
               className="w-full"
-              value={formData.username}
+              value={formData.username || ''} // Siempre como string
+              onChange={handleChange}
+            />
+            <Input
+              type="text"
+              label="Nombre de la Veterinaria"
+              name="veterinaryClinicName"
+              placeholder="Escribe el nombre de tu clínica veterinaria"
+              variant="bordered"
+              className="w-full"
+              value={formData.veterinaryClinicName || ''} // Siempre como string
               onChange={handleChange}
             />
           </div>
           <div className="flex flex-col gap-4 w-full">
+            <Input
+              type="text"
+              label="Dirección de la Veterinaria"
+              name="veterinaryAddress"
+              placeholder="Escribe la dirección de tu clínica veterinaria"
+              variant="bordered"
+              className="w-full"
+              value={formData.veterinaryAddress || ''} // Siempre como string
+              onChange={handleChange}
+            />
             <Input
               type="text"
               label="Número"
@@ -142,7 +191,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ onNext, formData, setFormData
               variant="bordered"
               placeholder="Escribe tu número"
               className="w-full"
-              value={formData.phoneNumber}
+              value={formData.phoneNumber || ''} // Siempre como string
               onChange={handleChange}
             />
             <div className="flex flex-row gap-2 w-full">
@@ -153,17 +202,16 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ onNext, formData, setFormData
                 variant="bordered"
                 placeholder="Escribe tu edad"
                 className="w-1/2"
-                value={formData.ageUser}
+                value={formData.ageUser || ''} // Siempre como string
                 onChange={handleChange}
-
               />
               <Select
                 variant="bordered"
                 label="Experiencia con animales"
                 name="experience"
-                placeholder="Escribe tu número"
+                placeholder="Escribe tu experiencia"
                 className="w-1/2"
-                value={formData.experience}
+                value={formData.experience || ''} // Asegúrate de que sea string
                 onChange={handleChange}
               >
                 <SelectItem key="0">Poca</SelectItem>
@@ -175,16 +223,154 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ onNext, formData, setFormData
         </div>
         <Textarea
           variant="bordered"
-          label="Biografía"
+          label="Misión"
           name="bio"
-          placeholder="Escribe algo breve sobre ti"
+          placeholder="Escribe la misión de tu clínica veterinaria"
           className="w-full"
-          value={formData.bio}
+          value={formData.bio || ''} // Siempre como string
           onChange={handleChange}
         />
         <Button onClick={onNext} className="w-1/2 bg-primary-400 text-white">
           Siguiente
         </Button>
+      </form>
+    </div>
+  );
+};
+
+
+const ScheduleForm: React.FC<ScheduleFormProps> = ({ onNext, onBack, formData, setFormData }) => {
+  const [checkboxes, setCheckboxes] = useState<{ [key: string]: { active: boolean, time: string} }>({
+    lunes: {
+      active: false,
+      time: '',
+    },
+    martes: {
+      active: false,
+      time: '',
+    },
+    miércoles: {
+      active: false,
+      time: '',
+    },
+    jueves: {
+      active: false,
+      time: '',
+    },
+    viernes: {
+      active: false,
+      time: '',
+    },
+    sábado: {
+      active: false,
+      time: '',
+    },
+    domingo: {
+      active: false,
+      time: '',
+    },
+  });
+
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value, checked } = e.target;
+
+    setCheckboxes((prev) => {
+      const updatedCheckboxes = {
+        ...prev,
+        [value]: {
+          ...prev[value],
+          active: checked,
+          time: (!checked ? '' : prev[value].time),
+        },
+      };
+      return updatedCheckboxes;
+    });
+
+    
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+
+    console.log('Input Change:', name, value);
+
+    // Actualizar formData solo con valores de los checks
+    setCheckboxes((prev) => {
+      return {
+        ...prev,
+        [name]: {
+          ...prev[name],
+          time: value,
+        },
+      };
+    });
+  };
+
+  const handleNext = () => {
+
+    const schedule = Object.keys(checkboxes).map((day) => {
+      if (checkboxes[day].active) {
+        return ({
+          day,
+          time: checkboxes[day].time,
+        });
+      } else {
+        return ({
+          day,
+          time: 'Cerrado',
+        });
+      }
+    });
+
+    console.log('Updated schedule:', schedule);
+
+    setFormData({
+      ...formData,
+      schedule: JSON.stringify(schedule),
+    });
+
+    onNext();
+  };
+
+  return (
+    <div className="flex flex-col gap-8 items-center w-full animate-fadeIn">
+      <h1 className="text-4xl font-semibold">Horario de la clínica veterinaria</h1>
+      <form className="flex flex-col gap-5 items-center w-3/4">
+        <div className="flex flex-col gap-4 w-full">
+          <CheckboxGroup
+            label="Selecciona los días disponibles"
+          >
+            {Object.keys(checkboxes).map((day) => (
+              <div key={day} className="flex items-center gap-2 mb-2">
+                <Checkbox
+                  value={day}
+                  className="mr-5"
+                  checked={checkboxes[day].active}
+                  onChange={handleCheckboxChange}
+                >
+                  {day.charAt(0).toUpperCase() + day.slice(1)}
+                </Checkbox>
+                <Input
+                  type="text"
+                  name={day}
+                  placeholder={`Horario ${day.charAt(0).toUpperCase() + day.slice(1)}`}
+                  className={`w-1/2 p-1`}
+                  value={String(checkboxes[day].time)} 
+                  onChange={handleInputChange}
+                  isDisabled={!checkboxes[day].active}
+                />
+              </div>
+            ))}
+          </CheckboxGroup>
+        </div>
+        <div className="flex gap-4 w-full mt-6">
+          <Button onClick={onBack} className="w-1/2 bg-gray-400 text-white">
+            Atrás
+          </Button>
+          <Button onClick={handleNext} className="w-1/2 bg-primary-400 text-white">
+            Siguiente
+          </Button>
+        </div>
       </form>
     </div>
   );
@@ -221,6 +407,7 @@ const UploadProfilePicture: React.FC<UploadProfilePictureProps> = ({ onBack, for
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
+    console.log('Final formData before submission:', formData);
 
     try {
       if (!formData.photoUrl) throw new Error("La URL de la imagen es nula. No se puede subir.");
@@ -332,6 +519,8 @@ const UploadProfilePicture: React.FC<UploadProfilePictureProps> = ({ onBack, for
     </form>
   );
 };
+
+
 
 
 export default Onboarding;
