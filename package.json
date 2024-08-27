@@ -33,6 +33,7 @@
     "lottie-web": "^5.12.2",
     "next": "^14.2.3",
     "next-auth": "^4.24.7",
+    "petmatch": "file:",
     "postcss-loader": "^8.1.1",
     "react": "^18.3.1",
     "react-chartjs-2": "^5.2.0",
