@@ -1,4 +1,6 @@
 'use client'
+
+import Compressor from "compressorjs";
 import React, { useState } from "react";
 import { Button, Input, Textarea, Avatar, CircularProgress, Select, SelectItem, CheckboxGroup, Checkbox } from "@nextui-org/react";
 import { FaArrowLeft } from "react-icons/fa";
