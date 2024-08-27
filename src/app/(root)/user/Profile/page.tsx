@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
-import {Button, Card, CardBody, CardFooter, CardHeader, Divider, Image, Link} from "@nextui-org/react";
+import React, { useEffect, useState } from "react";
+import { Button, Card, CardBody, CardFooter, CardHeader, Divider, Image, Link } from "@nextui-org/react";
 import PostCard from "@/Components/PostCard/PostCard";
 import CustomPieChart from "@/Components/CustomPieChart/CustomPieChart";
 import { useRouter } from "next/navigation";
@@ -31,12 +31,26 @@ export default function Profile() {
   const router = useRouter()
 
   const vetPost = () => {
-    router.push('/user/VetPost');
+    router.push(isMobile ? "/user/MobilePostVet" : "/user/VetPost");
   };
 
   const map = () => {
     router.push('/user/Maps');
   };
+
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const isMobileDevice = window.innerWidth <= 768;
+      setIsMobile(isMobileDevice);
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
     <div className="flex flex-col gap-4 w-full h-full">
