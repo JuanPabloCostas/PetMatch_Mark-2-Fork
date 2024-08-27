@@ -145,7 +145,7 @@ const AddPost: React.FC<AddPostProps> = ({ onPostAdded, parentId }) => {
 
               {/* Camera Input */}
               <Button isIconOnly className="bg-transparent p-0 relative cursor-auto">
-                <label htmlFor="camera-upload" className="">
+                <label htmlFor="camera-upload" className="xl:hidden">
                   <span className="material-symbols-outlined cursor-pointer">camera</span>
                 </label>
                 <input
