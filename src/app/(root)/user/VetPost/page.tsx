@@ -8,60 +8,72 @@ import { getSizeLabel } from "@/data/sizeAnimals";
 import { getAgeLabel } from "@/data/ageAnimals";
 import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
+import { getUserStatus } from "@/libs/actions/user.actions";
 
 export default function VetPost() {
   const [posts, setPosts] = useState<PostCardProps[]>([]);
   const { user } = useUser();
+  const router = useRouter()
 
   useEffect(() => {
-    if (!user) return;
-
-    const fetchData = async () => {
+    const checkUserOnboardingStatusAndFetchPosts = async () => {
+      if (!user) return;
+  
       try {
-        const response = await fetch(`/api/posts/getPropios/${user.id}`);
+        const email = user.emailAddresses?.[0]?.emailAddress;
+        let userStatus;
+  
+        if (email) {
+          userStatus = await getUserStatus(email);
+          if (userStatus && !userStatus.onboarded) {
+            router.push("/Onboarding");
+            return;
+          }
+        }
+  
+        const response = await fetch(`/api/posts/getPropios?userId=${userStatus?.id}`);
         if (!response.ok) {
           throw new Error("Failed to fetch data");
         }
+  
         const data = await response.json();
-        console.log("Posts Data:", data.data);
-        console.log("Current User ID:", user.id);
-
-        data.data.forEach((post: any, index: number) => {
+  
+        if (!data || !data.posts) {
+          throw new Error("Invalid data format");
+        }
+  
+        data.posts.forEach((post: any, index: number) => {
           console.log(`Post ${index}:`, post);
         });
-
-        const userPosts = data.data.filter((post: any) => {
-          return post.user && post.user.id === user.id;
-        });
-
+  
+        const userPosts = data.posts.filter((post: any) => post.userEmail === user.emailAddresses[0]?.emailAddress);
+  
         console.log("User Posts:", userPosts);
-
+  
         const formattedPosts = userPosts.map((post: any, index: number) => {
-          const formattedPost = {
+          return {
             id: index,
             urlImage: post.urlImage,
-            avatar: post.user.photoUrl,
-            fullname: post.user.fullname,
-            username: post.user.username,
+            avatar: "", // Assumed that user photo URL is not present in the post data
+            fullname: "", // Assumed that user fullname is not present in the post data
+            username: "", // Assumed that username is not present in the post data
             content: post.description,
-            race: post.animal.breed,
-            size: getSizeLabel(post.animal.size),
-            age: getAgeLabel(post.animal.age),
-            instagram: "",
-            whatsapp: "",
-            facebook: ""
+            race: "", // Assumed that race info is not present in the post data
+            size: "", // Assumed that size info is not present in the post data
+            age: "", // Assumed that age info is not present in the post data
+          
           };
-          return formattedPost;
         });
-
+  
         setPosts(formattedPosts);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching data or verifying user status:", error);
       }
     };
-
-    fetchData();
-  }, [user]);
+  
+    checkUserOnboardingStatusAndFetchPosts();
+  }, [user, router]);
+   
 
   return (
     <div className="flex flex-col w-full h-full gap-8">
