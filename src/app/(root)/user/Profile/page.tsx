@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import {Button, Card, CardBody, CardFooter, CardHeader, Divider, Image, Link} from "@nextui-org/react";
 import PostCard from "@/Components/PostCard/PostCard";
 import CustomPieChart from "@/Components/CustomPieChart/CustomPieChart";
+import { useRouter } from "next/navigation";
 
 const chartData = [
   {
@@ -27,6 +28,16 @@ const chartData = [
 ];
 
 export default function Profile() {
+  const router = useRouter()
+
+  const vetPost = () => {
+    router.push('/user/VetPost');
+  };
+
+  const map = () => {
+    router.push('/user/Maps');
+  };
+
   return (
     <div className="flex flex-col gap-4 w-full h-full">
       <header className="flex justify-between items-center">
@@ -81,8 +92,8 @@ export default function Profile() {
             </ul>
           </div>
           <div id="botones" className="flex flex-col gap-4 justify-end lg:items-end lg:flex-row">
-            <Button className="bg-secondary-200 w-full lg:w-auto">Ver Publicaciones</Button>
-            <Button className="bg-secondary-200 w-full lg:w-auto">Ver Mapa</Button>
+            <Button className="bg-secondary-200 w-full lg:w-auto" onClick={vetPost}>Ver Publicaciones</Button>
+            <Button className="bg-secondary-200 w-full lg:w-auto" onClick={map}>Ver Mapa</Button>
           </div>
         </div>
         <Divider />
