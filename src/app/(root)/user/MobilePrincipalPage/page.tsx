@@ -34,27 +34,23 @@ export default function MobilePrincipalPage() {
     const fetchData = async () => {
       try {
         console.log("Probando");
-        const request = {email: email};
+        const request = { email: email };
         const postsIds = await fetch(
           'https://s136w4qddk.execute-api.us-east-1.amazonaws.com/dev', {
-            method: "POST",
-            headers: {
-              "content-type": "application/json",
-            },
-            body: JSON.stringify(request),
-          }
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify(request),
+        }
         );
         const result = await postsIds.json();
 
         const { response } = result;
-        if(response != undefined){
-          await setQuestionnaireResolved(true);
-        }
-        console.log(questionnaireResolved);
-        if(questionnaireResolved){
+        if (response != undefined) {
           const arrayIde = JSON.stringify(response);
-        const res = await fetch("/api/getFiltered", {
-            method: "GET",
+          const res = await fetch("/api/posts/getFiltered", {
+            method: "POST",
             headers: {
               "content-type": "application/json",
             },
@@ -66,7 +62,7 @@ export default function MobilePrincipalPage() {
           const data = await res.json();
           console.log(data);
           (data.data);
-  
+
           const formattedPosts = data.data.map((post: any, index: number) => ({
             id: post.id, // Asigna el id correcto aquí
             urlImage: post.urlImage,
@@ -81,34 +77,37 @@ export default function MobilePrincipalPage() {
             whatsapp: post.whatsapp,
             facebook: post.facebook
           }));
-  
+
           setPosts(formattedPosts);
-        }else{
-        const response = await fetch("/api/posts");
-        if (!response.ok) {
-          throw new Error("Failed to fetch data");
+          // await setQuestionnaireResolved(true);
         }
-        const data = await response.json();
-        console.log(data);
-        (data.data);
+        // console.log(questionnaireResolved);
+        else {
+          const response = await fetch("/api/posts");
+          if (!response.ok) {
+            throw new Error("Failed to fetch data");
+          }
+          const data = await response.json();
+          console.log(data);
+          (data.data);
 
-        const formattedPosts = data.data.map((post: any, index: number) => ({
-          id: post.id, // Asigna el id correcto aquí
-          urlImage: post.urlImage,
-          avatar: post.avatar,
-          fullname: post.fullname,
-          username: post.username,
-          content: post.content,
-          race: post.race,
-          size: post.size,
-          age: post.age,
-          instagram: post.instagram,
-          whatsapp: post.whatsapp,
-          facebook: post.facebook
-        }));
+          const formattedPosts = data.data.map((post: any, index: number) => ({
+            id: post.id, // Asigna el id correcto aquí
+            urlImage: post.urlImage,
+            avatar: post.avatar,
+            fullname: post.fullname,
+            username: post.username,
+            content: post.content,
+            race: post.race,
+            size: post.size,
+            age: post.age,
+            instagram: post.instagram,
+            whatsapp: post.whatsapp,
+            facebook: post.facebook
+          }));
 
-        setPosts(formattedPosts);
-      }
+          setPosts(formattedPosts);
+        }
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -137,17 +136,17 @@ export default function MobilePrincipalPage() {
         />
         <h1 className="text-center font-bold text-xl">Tus Recomendaciones</h1>
         {!questionnaireResolved && (
-        <div className="flex mx-auto justify-center mt-8">
-              <Button
-                className="bg-success-300 font-bold text-xl"
-                size="lg"
-                as={Link} // Enlace al catálogo
-                href="/user/Questionnaire"
-                onClick={handleQuestionnaireClick} // Maneja el click para actualizar el estado
-              >
-                Resolver Cuestionario
-              </Button>
-        </div>
+          <div className="flex mx-auto justify-center mt-8">
+            <Button
+              className="bg-success-300 font-bold text-xl"
+              size="lg"
+              as={Link} // Enlace al catálogo
+              href="/user/Questionnaire"
+              onClick={handleQuestionnaireClick} // Maneja el click para actualizar el estado
+            >
+              Resolver Cuestionario
+            </Button>
+          </div>
         )}
       </header>
       <div className="grid grid-cols-3 gap-4 mt-4">

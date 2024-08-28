@@ -1,7 +1,7 @@
 import prisma from "@/libs/db";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(request: NextRequest) {
+export async function POST(request: NextRequest) {
     try {
       const listed = await request.json();
         // Obtén todos los posts, incluyendo la información relacionada del usuario y del animal
