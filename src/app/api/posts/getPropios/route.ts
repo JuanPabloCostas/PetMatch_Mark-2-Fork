@@ -25,6 +25,6 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ code: 200, posts, message: "OK" });
   } catch (error) {
     (error);
-    return NextResponse.json({ code: 500, message: "ERROR" });
+    return NextResponse.json({ code: 500, message: "ERROR", error });
   }
 }
