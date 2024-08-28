@@ -66,6 +66,10 @@ export async function GET(request: NextRequest) {
   }
 
   try {
+
+    const { searchParams } = new URL(request.url);
+    const userId = searchParams.get("userId") || null;
+
     // Obtiene la fecha y hora actual en UTC
     const currentDateUTC = new Date();
 
@@ -85,6 +89,7 @@ export async function GET(request: NextRequest) {
         text: true,
         imgUrl: true,
         createdAt: true,
+        likes: true,
         user: {
           select: {
             fullname: true,
@@ -110,6 +115,7 @@ export async function GET(request: NextRequest) {
             createdAt: 'desc',
           },
         },
+        ...(userId ? { user_likes: { where: { userId: userId } } } : {})
       },
     });
 
@@ -152,6 +158,7 @@ export async function GET(request: NextRequest) {
       ...comment,
       createdAt: comment.createdAt.toISOString(),
       timeDifference: calculateTimeDifference(comment.createdAt),
+      liked: (comment.user_likes ? comment.user_likes.length > 0   : false),
       childrenComments: comment.childrenComments.map(childComment => ({
         ...childComment,
         createdAt: childComment.createdAt.toISOString(),
