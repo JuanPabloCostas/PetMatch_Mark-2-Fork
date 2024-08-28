@@ -30,6 +30,7 @@ export default function VetPost() {
         }
   
         const response = await fetch(`/api/posts/getPropios?userId=${userStatus?.id}`);
+        
         if (!response.ok) {
           throw new Error("Failed to fetch data");
         }
