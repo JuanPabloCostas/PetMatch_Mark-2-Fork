@@ -3,7 +3,7 @@ import Compressor from "compressorjs";
 // fetchChildrenComments.ts
 export async function fetchChildrenComments(id: string) {
   try {
-    const response = await fetch(`/api/comments/children?id=${id}`, {
+    const response = await fetch(`/api/comments/childrenId?id=${id}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -90,7 +90,7 @@ export async function sendComment(
     };
 
     const postResponse = await fetch(
-      parentId ? `/api/comments/children?id=${parentId}` : "/api/comments",
+      parentId ? `/api/comments/childrenId?id=${parentId}` : "/api/comments",
       {
         method: "POST",
         headers: {
@@ -113,6 +113,33 @@ export async function sendComment(
     return false;
   }
 }
+
+export async function countChildrenComments(id: string): Promise<number | null> {
+  try {
+    // Realiza una solicitud GET al endpoint que cuenta los comentarios hijos
+    const response = await fetch(`/api/comments/children?parentId=${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    // Verifica si la respuesta es exitosa
+    if (!response.ok) {
+      throw new Error(`Error: ${response.statusText}`);
+    }
+
+    // Extrae y retorna el número de comentarios hijos del response
+    const data = await response.json();
+    
+    return data.data.childrenCount;
+    
+  } catch (error) {
+    console.error("Failed to fetch children comments count:", error);
+    return null; // Maneja el error de manera adecuada en tu aplicación
+  }
+}
+
 
 
 
