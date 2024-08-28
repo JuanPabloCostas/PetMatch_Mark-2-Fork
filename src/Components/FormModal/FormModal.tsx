@@ -144,6 +144,9 @@ export default function FormModal({ isOpen, onClose }: FormModalProps) {
         email: user?.primaryEmailAddress?.emailAddress,
       };
 
+      console.log(postFormData);
+      
+
       const postResponse = await fetch("/api/posts", {
         method: "POST",
         headers: {
@@ -151,6 +154,12 @@ export default function FormModal({ isOpen, onClose }: FormModalProps) {
         },
         body: JSON.stringify(postFormData),
       });
+
+      console.log("Se hizo el fetch");
+
+      console.log(await postResponse.json());
+      
+      
 
       if (postResponse.ok) {
         ("Formulario enviado correctamente.");

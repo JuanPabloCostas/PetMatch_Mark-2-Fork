@@ -17,11 +17,30 @@ export async function POST(request: NextRequest) {
       time,
       weather,
       sizeH,
-      experienceNeeded,
+      experience,
       description,
       imageUrl,
       email, // Usaremos el email del usuario
     } = await request.json();
+
+    console.log({
+      types,
+      breed,
+      colors,
+      size,
+      age,
+      training,
+      temperament,
+      cost,
+      time,
+      weather,
+      sizeH,
+      experience,
+      description,
+      imageUrl,
+      email, // Usaremos el email del usuario
+    });
+    
 
     if (
       !types ||
@@ -35,7 +54,7 @@ export async function POST(request: NextRequest) {
       !time ||
       !weather ||
       !sizeH ||
-      !experienceNeeded ||
+      !experience ||
       !description ||
       !imageUrl ||
       !email // Validamos que el email esté presente
@@ -78,7 +97,7 @@ export async function POST(request: NextRequest) {
         maintenance: parseFloat(cost[0]),
         timeNeeded: parseFloat(time[0]),
         space_Needed: parseFloat(sizeH[0]),
-        experience_needed: parseFloat(experienceNeeded[0]),
+        experience_needed: parseFloat(experience[0]),
         weather: parseFloat(weather[0]),
         total_plus,
       },
