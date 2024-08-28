@@ -32,11 +32,12 @@ export interface PostCardProps {
   age?: string;      
   instagram?: string; 
   whatsapp?: string;  
-  facebook?: string;  
+  facebook?: string;
+  userId?: string;  
 }
 
 export default function PostCard({
-  id, urlImage, avatar, fullname, username, content, race, size, age, instagram, whatsapp, facebook
+  id, urlImage, avatar, fullname, username, content, race, size, age, instagram, whatsapp, facebook, userId
 }: PostCardProps) {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -74,6 +75,7 @@ export default function PostCard({
             instagram={instagram}
             whatsapp={whatsapp}
             facebook={facebook}
+            userId={userId}
           />
         </ModalContent>
       </Modal>

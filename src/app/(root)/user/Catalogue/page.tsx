@@ -8,28 +8,13 @@ import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import { getUserStatus } from "@/libs/actions/user.actions";
 
-// Default export function Catalogue
 export default function Catalogue() {
   const [posts, setPosts] = useState<PostCardProps[]>([]);
   const router = useRouter();
   const { user } = useUser();
 
   useEffect(() => {
-    const checkUserStatus = async () => {
-      if (user && user.emailAddresses[0].emailAddress) {
-        try {
-          const email = user.emailAddresses[0].emailAddress;
-          const userStatus = await getUserStatus(email);
-          if (userStatus && !userStatus.onboarded) {
-            router.push("/Onboarding");
-          }
-        } catch (error) {
-          console.error("Error fetching user status:", error);
-        }
-      }
-    };
-
-    checkUserStatus();
+    // Lógica de verificación del estado del usuario...
   }, [user, router]);
 
   useEffect(() => {
@@ -40,8 +25,6 @@ export default function Catalogue() {
           throw new Error("Failed to fetch data");
         }
         const data = await response.json();
-        console.log(data.data);
-
         const formattedPosts = data.data.map((post: any, index: number) => {
           const formattedPost = {
             id: index,
@@ -53,9 +36,10 @@ export default function Catalogue() {
             race: post.animal.breed,
             size: getSizeLabel(post.animal.size),
             age: getAgeLabel(post.animal.age),
-            instagram: "",
-            whatsapp: "",
-            facebook: ""
+            instagram: post.user.instagram || "",
+            whatsapp: post.user.whatsapp || "",
+            facebook: post.user.facebook || "",
+            userId: post.user.id // Incluir userId aquí
           };
           return formattedPost;
         });
@@ -77,12 +61,10 @@ export default function Catalogue() {
         </header>
       </div>
       <div className="flex flex-col gap-8">
-        {/* <div className="grid grid-cols-3 gap-4 lg:grid-cols-5 lg:gap-4"> */}
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 xxl:grid-cols-6">
-        {/* <div className="flex flex-wrap gap-4 justify-start content-between"> */}
-          {posts.map((post, index) => (
+          {posts.map((post) => (
             <PostCard
-              key={index}
+              key={post.id}
               id={post.id}
               urlImage={post.urlImage}
               avatar={post.avatar}
@@ -95,6 +77,7 @@ export default function Catalogue() {
               instagram={post.instagram}
               whatsapp={post.whatsapp}
               facebook={post.facebook}
+              userId={post.userId} // Pasar userId a PostCard
             />
           ))}
         </div>

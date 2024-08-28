@@ -1,6 +1,7 @@
 import React from "react";
-import { Card, Avatar, Button, Chip, Image, Divider } from "@nextui-org/react";
+import { Card, Avatar, Button, Chip, Divider } from "@nextui-org/react";
 import NextImage from "next/image";
+import { useRouter } from "next/navigation"; // Importar useRouter
 
 interface FullPostCardProps {
   id: number;
@@ -15,9 +16,33 @@ interface FullPostCardProps {
   instagram?: string;
   whatsapp?: string;
   facebook?: string;
+  userId?: string; // Agregar la prop userId
 }
 
-export default function FullPostCard({ id, urlImage, avatar, fullname, username, content, race, size, age, instagram, whatsapp, facebook }: FullPostCardProps) {
+export default function FullPostCard({
+  id,
+  urlImage,
+  avatar,
+  fullname,
+  username,
+  content,
+  race,
+  size,
+  age,
+  instagram,
+  whatsapp,
+  facebook,
+  userId, // Agregar la prop userId
+}: FullPostCardProps) {
+  const router = useRouter(); // Inicializar useRouter
+
+  const handleMatchClick = () => {
+    if (userId) {
+      console.log(userId)
+      router.push(`/user/Profile/${userId}`); // Redirigir al perfil del usuario
+    }
+  };
+
   return (
     <Card className="h-[560px] items-stretch flex flex-row" key={id}>
       <div className="flex flex-col gap-8 w-3/4 bg-gray-300">
@@ -62,7 +87,10 @@ export default function FullPostCard({ id, urlImage, avatar, fullname, username,
           </div>
         </div>
         <div className="flex flex-row w-full justify-end px-4 pb-4">
-          <Button className="font-bold bg-transparent border-1 border-primary-500 hover:bg-primary-500 hover:text-white">
+          <Button
+            className="font-bold bg-transparent border-1 border-primary-500 hover:bg-primary-500 hover:text-white"
+            onClick={handleMatchClick} // Añadir el evento de clic
+          >
             Match
           </Button>
         </div>

@@ -1,9 +1,8 @@
-"use client";
-
-import React, { useState } from "react";
-import {Button, Card, CardBody, CardFooter, CardHeader, Divider, Image, Link} from "@nextui-org/react";
-import PostCard from "@/Components/PostCard/PostCard";
+'use client'
+import React, { useEffect, useState } from "react";
+import { Button, Divider } from "@nextui-org/react";
 import CustomPieChart from "@/Components/CustomPieChart/CustomPieChart";
+import { fetchVeterinarianData } from "@/libs/actions/user.actions";
 
 const chartData = [
   {
@@ -26,11 +25,88 @@ const chartData = [
   },
 ];
 
-export default function Profile() {
+interface PageProps {
+  params: {
+    id: string;
+  };
+}
+
+interface FormattedPage {
+  veterinaryClinicName: string;
+  veterinaryAddress: string;
+  phoneNumber: string;
+  bio: string;
+  photoUrl: string;
+  schedule: string; // Ahora es un string que representa un JSON
+}
+
+interface ScheduleItem {
+  day: string;
+  time: string;
+}
+
+const Page: React.FC<PageProps> = ({ params }) => {
+  const [vetInfo, setVetInfo] = useState<FormattedPage | null>(null);
+
+  const loadVeterinarianData = async () => {
+    try {
+      const result = await fetchVeterinarianData(params.id);
+
+      if (result) {
+        const {
+          veterinaryClinicName,
+          veterinaryAddress,
+          phoneNumber,
+          bio,
+          photoUrl,
+          schedule,
+        } = result;
+
+        const formattedVetInfo: FormattedPage = {
+          veterinaryClinicName,
+          veterinaryAddress,
+          phoneNumber,
+          bio,
+          photoUrl,
+          schedule: schedule || "[]", // Asegúrate de que al menos sea un array vacío
+        };
+
+        setVetInfo(formattedVetInfo);
+      } else {
+        console.error("Unexpected response format:", result);
+      }
+    } catch (error) {
+      console.error("Error fetching veterinarian data:", error);
+    }
+  };
+
+  useEffect(() => {
+    loadVeterinarianData();
+  }, [params.id]);
+
+  const getFormattedSchedule = () => {
+    if (!vetInfo?.schedule) return [];
+
+    try {
+      const scheduleArray: ScheduleItem[] = JSON.parse(vetInfo.schedule);
+      return scheduleArray.map((item) => ({
+        day: item.day.charAt(0).toUpperCase() + item.day.slice(1), // Capitaliza el día
+        time: item.time,
+      }));
+    } catch (error) {
+      console.error("Error parsing schedule:", error);
+      return [];
+    }
+  };
+
+  const formattedSchedule = getFormattedSchedule();
+
   return (
     <div className="flex flex-col gap-4 w-full h-full">
       <header className="flex justify-between items-center">
-        <h1 className="lg:text-4xl text-xl font-bold">Veterinaria MyKan</h1>
+        <h1 className="lg:text-4xl text-xl font-bold">
+          {vetInfo?.veterinaryClinicName || "Cargando nombre..."}
+        </h1>
         <div className="flex gap-4">
           <Button isIconOnly className="bg-transparent">
             <span className="material-symbols-outlined">notifications</span>
@@ -46,24 +122,26 @@ export default function Profile() {
           <div id="image" className="flex justify-center lg:justify-start">
             <img
               alt="Imagen de perfil"
-              src="/Mono.jpg"
+              src={vetInfo?.photoUrl || "/Mono.jpg"}
               className="rounded-lg object-cover w-[200px] h-[200px] lg:w-[300px] lg:h-[300px]"
             />
           </div>
           <div id="infoVet" className="flex flex-col gap-4">
-            <h1 className="text-2xl font-bold">Veterinaria MyKan</h1>
+            <h1 className="text-2xl font-bold">
+              {vetInfo?.veterinaryClinicName || "Cargando nombre de la veterinaria..."}
+            </h1>
             <p className="text-justify">
-              Veterinaria Mykan es un centro dedicado al cuidado integral de las mascotas, ofreciendo servicios de salud, bienestar y grooming para animales domésticos. ¡Tu mascota está en buenas manos!
+              {vetInfo?.bio ||
+                "Cargando misión de la veterinaria..."}
             </p>
             <div className="flex items-center gap-2">
               <span className="material-symbols-outlined">call</span>
-              442-217-90-78
+              {vetInfo?.phoneNumber || "Cargando número de la veterinaria..."}
             </div>
             <div className="flex items-center gap-2">
               <span className="material-symbols-outlined">location_on</span>
-              Arquitectura 9 Col.Industrial 76130, <br /> Santiago de Querétaro
+              {vetInfo?.veterinaryAddress || "Cargando dirección de la veterinaria..."}
             </div>
-
           </div>
           <div id="horarios" className="flex flex-col gap-4">
             <div className="flex items-center gap-2">
@@ -71,13 +149,15 @@ export default function Profile() {
               Horarios
             </div>
             <ul className="list-disc list-inside">
-              <li>Lunes: Abierto 24 horas</li>
-              <li>Martes: Abierto 24 horas</li>
-              <li>Miércoles: Abierto 24 horas</li>
-              <li>Jueves: Abierto 24 horas</li>
-              <li>Viernes: Abierto 24 horas</li>
-              <li>Sábado: Abierto 24 horas</li>
-              <li>Domingo: Abierto 24 horas</li>
+              {formattedSchedule.length > 0 ? (
+                formattedSchedule.map((daySchedule, index) => (
+                  <li key={index}>
+                    {`${daySchedule.day}: ${daySchedule.time}`}
+                  </li>
+                ))
+              ) : (
+                'Cargando Horario de la Veterinaria'
+              )}
             </ul>
           </div>
           <div id="botones" className="flex flex-col gap-4 justify-end lg:items-end lg:flex-row">
@@ -100,4 +180,6 @@ export default function Profile() {
       </div>
     </div>
   );
-}
+};
+
+export default Page;
