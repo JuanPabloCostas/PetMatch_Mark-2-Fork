@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Avatar, Card, CardBody, CardFooter, CardHeader, Image, Button } from "@nextui-org/react";
+import { countChildrenComments } from '@/libs/actions/comment.actions';
 
 interface Post {
   id: string;
@@ -25,6 +26,19 @@ interface CommunityCardProps {
 
 const CommunityCard: React.FC<CommunityCardProps> = ({ post, handleFavorite, handleUnfavorite, handleAddComment, handleReply, handleOpen }) => {
   const [isLiked, setIsLiked] = useState(false);
+  const [childrenCommentsCount, setChildrenCommentsCount] = useState<number>(0);
+
+  useEffect(() => {
+    // Obtener el número de comentarios hijos para el post actual
+    const fetchChildrenCommentsCount = async () => {
+      const count = await countChildrenComments(post.id);
+      if (count !== null) {
+        setChildrenCommentsCount(count);
+      }
+    };
+
+    fetchChildrenCommentsCount();
+  }, [post.id]);
 
   const toggleFavorite = () => {
     if (isLiked) {
@@ -98,6 +112,7 @@ const CommunityCard: React.FC<CommunityCardProps> = ({ post, handleFavorite, han
             size="sm"
           >
             <span className="material-symbols-outlined text-sm" style={{ fontSize: '20px' }}>add_comment</span>
+            <span className='ml-1 mb-1'>{childrenCommentsCount}</span>
           </Button>
           <Button
             isIconOnly

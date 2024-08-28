@@ -59,6 +59,14 @@ export async function GET(request: NextRequest) {
   console.log(currentDateLocalISO);
 
   try {
+
+    const { searchParams } = new URL(request.url);
+    const userId = searchParams.get("userId") || null;
+
+
+
+
+
     // Realiza la consulta para obtener los comentarios principales (sin parentId)
     const comments = await prisma.comment.findMany({
       where: {
@@ -76,11 +84,18 @@ export async function GET(request: NextRequest) {
             photoUrl: true,
           },
         },
+        user_likes: {
+          where: {
+            ...(userId ? { userId: userId } : {}),
+          },
+        },
       },
       orderBy: {
         createdAt: 'desc', 
       },
     });
+
+    
 
       // Calcula la diferencia de tiempo para cada comentario
       const commentsWithTimeDiff = comments.map(comment => {

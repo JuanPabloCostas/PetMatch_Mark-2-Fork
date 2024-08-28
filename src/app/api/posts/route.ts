@@ -131,6 +131,7 @@ export async function GET(request: NextRequest) {
         },
         user: {
           select: {
+            id:true,
             fullname:true,
             username: true,
             photoUrl:true
