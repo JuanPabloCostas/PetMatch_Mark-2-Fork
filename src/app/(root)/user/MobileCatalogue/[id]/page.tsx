@@ -71,7 +71,7 @@ export default function Page() {
 
     const fetchPost = async () => {
       try {
-        console.log("Fetching post...");
+        ("Fetching post...");
         const response = await fetch(`/api/posts/${id}`);
         if (!response.ok) {
           throw new Error("Failed to fetch post data");
