@@ -49,6 +49,7 @@ export default function VetPost() {
         }
   
         data.posts.forEach((post: any, index: number) => {
+
         });
   
         const userPosts = data.posts.filter((post: any) => post.userEmail === user.emailAddresses[0]?.emailAddress);

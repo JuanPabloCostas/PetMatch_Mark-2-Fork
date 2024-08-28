@@ -296,6 +296,7 @@ const ScheduleForm: React.FC<ScheduleFormProps> = ({ onNext, onBack, formData, s
       };
       return updatedCheckboxes;
     });
+
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
