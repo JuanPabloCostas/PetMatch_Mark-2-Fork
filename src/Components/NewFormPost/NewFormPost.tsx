@@ -11,7 +11,8 @@ import { temperAnimals } from "@/data/temperAnimals";
 import { costAnimals } from "@/data/costAnimals";
 import { timeAnimals } from "@/data/timeAnimals";
 import { Weather } from "@/data/weather";
-import { sizeHome } from "@/data/sizeHome"; // Asegúrate de importar correctamente tus datos
+import { sizeHome } from "@/data/sizeHome";
+import { experienceNeeded } from "@/data/experienceNeeded"; // Asegúrate de importar correctamente tus datos
 
 interface Raza {
   label: string;
@@ -31,6 +32,7 @@ interface FormData {
   time?: string[];
   weather?: string[];
   sizeH?: string[];
+  experience?: string[];
   description?: string;
   instagram?: string;
   whatsapp?: string;
@@ -57,6 +59,7 @@ export default function NewFormPost({ onFormDataChange }: FormNewPostProps) {
   const [time, setTime] = useState<string[]>([]);
   const [weather, setWeather] = useState<string[]>([]);
   const [sizeH, setSizeH] = useState<string[]>([]);
+  const [experience, setExperience] = useState<string[]>([]);
 
   useEffect(() => {
     onFormDataChange(formData);
@@ -162,6 +165,7 @@ export default function NewFormPost({ onFormDataChange }: FormNewPostProps) {
       time,
       weather,
       sizeH,
+      experience,
     });
   }, [
     values,
@@ -175,6 +179,7 @@ export default function NewFormPost({ onFormDataChange }: FormNewPostProps) {
     time,
     weather,
     sizeH,
+    experience,
   ]);
 
   return (
@@ -374,13 +379,13 @@ export default function NewFormPost({ onFormDataChange }: FormNewPostProps) {
           label="Experencia necesaria"
           placeholder="Selecciona el nivel de experiencia"
           className="w-full"
-          name="sizeH"
-          value={sizeH.join(",")}
-          onChange={(e) => setSizeH(e.target.value.split(","))}
+          name="experienceNeeded"
+          value={experience.join(",")}
+          onChange={(e) => setExperience(e.target.value.split(","))}
         >
-          {sizeHome.map((sizeH) => (
-            <SelectItem key={sizeH.value} value={sizeH.value}>
-              {sizeH.label}
+          {experienceNeeded.map((experience) => (
+            <SelectItem key={experience.value} value={experience.value}>
+              {experience.label}
             </SelectItem>
           ))}
         </Select>
