@@ -57,6 +57,7 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   const idParam = request.nextUrl.searchParams.get("id");
+  const userIdParam = request.nextUrl.searchParams.get("userId");
 
   if (!idParam) {
     return NextResponse.json({
@@ -85,6 +86,7 @@ export async function GET(request: NextRequest) {
         text: true,
         imgUrl: true,
         createdAt: true,
+        likes: true,
         user: {
           select: {
             fullname: true,
@@ -92,6 +94,7 @@ export async function GET(request: NextRequest) {
             photoUrl: true,
           },
         },
+        ...(userIdParam ? { user_likes: { where: { userId: userIdParam } } } : {}),
         childrenComments: {
           select: {
             id: true,
@@ -110,6 +113,7 @@ export async function GET(request: NextRequest) {
             createdAt: 'desc',
           },
         },
+        
       },
     });
 
@@ -152,6 +156,7 @@ export async function GET(request: NextRequest) {
       ...comment,
       createdAt: comment.createdAt.toISOString(),
       timeDifference: calculateTimeDifference(comment.createdAt),
+      liked: (comment.user_likes ? comment.user_likes.length > 0 : false),
       childrenComments: comment.childrenComments.map(childComment => ({
         ...childComment,
         createdAt: childComment.createdAt.toISOString(),

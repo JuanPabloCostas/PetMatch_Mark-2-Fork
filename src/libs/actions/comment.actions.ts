@@ -3,7 +3,7 @@ import Compressor from "compressorjs";
 // fetchChildrenComments.ts
 export async function fetchChildrenComments(id: string, userId: string | undefined) {
   try {
-    const response = await fetch(`/api/comments/children?id=${id}&userId=${userId}`, {
+    const response = await fetch(`/api/comments/childrenId?id=${id}&userId=${userId}`, {
 
       method: 'GET',
       headers: {
@@ -12,6 +12,9 @@ export async function fetchChildrenComments(id: string, userId: string | undefin
     });
 
     const resBody = await response.json();
+
+    console.log(resBody);
+    
 
     if (!response.ok) {
       throw new Error(resBody.message || "Error fetching comments");
