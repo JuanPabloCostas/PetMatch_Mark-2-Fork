@@ -9,23 +9,26 @@ import { Button, Divider } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Loading from "@/Components/Loading/Loading";
+import { getUserStatus } from "@/libs/actions/user.actions";
 
-interface FormattedPost {
+export interface FormattedPost {
   id: string;
   fullname: string;
   username: string;
   text: string;
   avatar: string;
-  timeDifference: string; 
-  image?: string; 
+  timeDifference: string;
+  image?: string;
   comments: number;
   likes: number;
   name?: string;
+  liked: boolean;
 }
 
 const Community: React.FC = () => {
   const [posts, setPosts] = useState<FormattedPost[]>([]);
   const { user } = useUser();
+  const [userId, setuserId] = useState<string | undefined>()
   const router = useRouter();
   const [isOpen, setisOpen] = useState(false);
   const [modalImage, setmodalImage] = useState<string | undefined>("");
@@ -42,12 +45,29 @@ const Community: React.FC = () => {
 
   const fetchComments = async () => {
     try {
-      const response = await fetch('/api/comments', {
+
+      const email = user?.emailAddresses[0].emailAddress;
+
+      let userStatus
+
+      if (email) {
+        userStatus = await getUserStatus(email);
+      }
+
+
+
+      const response = await fetch(`/api/comments?userId=${userStatus?.id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
         },
       });
+
+      setuserId(userStatus?.id);
+
+      console.log();
+      
+
 
       const resBody = await response.json();
 
@@ -61,19 +81,22 @@ const Community: React.FC = () => {
         const formattedPosts: FormattedPost[] = commentsArray.map((comment: any) => {
           return {
             id: comment.id,
-            fullname: comment.user?.fullname || "Anonymous", 
-            username: comment.user?.username || "anonymous", 
-            text: comment.text, 
+            fullname: comment.user?.fullname || "Anonymous",
+            username: comment.user?.username || "anonymous",
+            text: comment.text,
             avatar: comment.user?.photoUrl || user?.imageUrl || "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp",
             image: comment.imgUrl || "",
-            timeDifference: comment.timeDifference || "Unknown", 
+            timeDifference: comment.timeDifference || "Unknown",
             comments: comment.childrenComments?.length || 0,
-            likes: 0,
+            likes: comment.likes,
             name: comment.user?.fullname.split(' ')[0] + " " + (comment.user?.fullname.split(' ').length > 1 ? comment.user?.fullname.split(' ')[1] : ''),
+            liked: comment.liked
           };
         });
 
         setPosts(formattedPosts);
+        console.log('Comments fetched successfully:', formattedPosts);
+
       } else {
         console.error('Unexpected response format:', resBody);
       }
@@ -86,20 +109,44 @@ const Community: React.FC = () => {
     fetchComments();
   }, [user?.imageUrl]);
 
-  const handleFavorite = (id: string) => {
+  const handleFavorite = async (id: string) => {
     setPosts((prevPosts) =>
       prevPosts.map((post) =>
         post.id === id ? { ...post, likes: post.likes + 1 } : post
       )
     );
+
+    await fetch(`/api/comments/likes`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        commentId: id,
+        userId: userId,
+        isLike: true
+      })
+    })
   };
 
-  const handleUnfavorite = (id: string) => {
+  const handleUnfavorite = async (id: string) => {
     setPosts((prevPosts) =>
       prevPosts.map((post) =>
         post.id === id ? { ...post, likes: post.likes - 1 } : post
       )
     );
+
+    await fetch(`/api/comments/likes`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        commentId: id,
+        userId: userId,
+        isLike: false
+      })
+    })
   };
 
   const handleAddComment = (id: string) => {
@@ -118,9 +165,9 @@ const Community: React.FC = () => {
     if (posts.length === 0) {
       setloading(true)
     }
-    
+
   }, [posts])
-  
+
 
   return (
     <>
@@ -157,11 +204,13 @@ const Community: React.FC = () => {
                 <div key={post.id}>
                   <CommunityCard
                     post={post}
+                    userId={userId}
                     handleFavorite={handleFavorite}
                     handleUnfavorite={handleUnfavorite}
                     handleAddComment={() => handleAddComment(post.id)}
                     handleReply={() => handleReply(post.id)}
                     handleOpen={handleOpen}
+
                   />
                   {index < posts.length - 1 && <Divider />}
                 </div>

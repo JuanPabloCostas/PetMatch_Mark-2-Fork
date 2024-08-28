@@ -77,6 +77,7 @@ export async function GET(request: NextRequest) {
         text: true,
         createdAt: true,
         imgUrl: true,
+        likes: true,
         user: {
           select: {
             fullname: true,
@@ -84,17 +85,17 @@ export async function GET(request: NextRequest) {
             photoUrl: true,
           },
         },
-        user_likes: {
-          where: {
-            ...(userId ? { userId: userId } : {}),
-          },
-        },
+        // user_likes: {
+        //   where: {
+        //     ...(userId ? { userId: userId } : {}),
+        //   },
+        // },
+        ...( userId ? { user_likes: { where: { userId: userId } } } : {}),
       },
       orderBy: {
         createdAt: 'desc', 
       },
     });
-
     
 
       // Calcula la diferencia de tiempo para cada comentario
@@ -124,6 +125,7 @@ export async function GET(request: NextRequest) {
       return {
         ...comment,
         timeDifference,
+        liked: (comment.user_likes ? comment.user_likes.length > 0 : false),
       };
     });
 

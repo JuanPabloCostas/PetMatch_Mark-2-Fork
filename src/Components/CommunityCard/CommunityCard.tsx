@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Avatar, Card, CardBody, CardFooter, CardHeader, Image, Button } from "@nextui-org/react";
+import { FormattedPost } from '@/app/(root)/user/Community/page';
 
 interface Post {
   id: string;
@@ -12,10 +13,12 @@ interface Post {
   comments: number;
   likes: number;
   name?: string;
+  liked: boolean;
 }
 
 interface CommunityCardProps {
-  post: Post;
+  post: FormattedPost;
+  userId: string | undefined;
   handleFavorite: (id: string) => void;
   handleUnfavorite: (id: string) => void;
   handleAddComment: (id: string) => void;
@@ -23,10 +26,15 @@ interface CommunityCardProps {
   handleOpen: (id?: string) => void;
 }
 
-const CommunityCard: React.FC<CommunityCardProps> = ({ post, handleFavorite, handleUnfavorite, handleAddComment, handleReply, handleOpen }) => {
-  const [isLiked, setIsLiked] = useState(false);
+const CommunityCard: React.FC<CommunityCardProps> = ({ post, handleFavorite, handleUnfavorite, handleAddComment, handleReply, handleOpen, userId }) => {
+  const [isLiked, setIsLiked] = useState(post.liked);
 
   const toggleFavorite = () => {
+
+    if (!userId) {
+      return
+    }
+    
     if (isLiked) {
       handleUnfavorite(post.id);
     } else {
@@ -89,6 +97,7 @@ const CommunityCard: React.FC<CommunityCardProps> = ({ post, handleFavorite, han
             <span className="material-symbols-outlined text-xs" style={{ fontSize: '20px' }}>
               favorite
             </span>
+            <span className="ml-1">{post.likes - 1}</span>
           </Button>
 
           <Button
