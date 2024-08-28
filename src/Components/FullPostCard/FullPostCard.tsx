@@ -1,9 +1,11 @@
 import React from "react";
-import { Card, Avatar, Button, Chip, Image, Divider } from "@nextui-org/react";
+import { Card, Avatar, Button, Chip, Divider } from "@nextui-org/react";
 import NextImage from "next/image";
+import { useRouter } from "next/navigation"; // Importar useRouter
 
 interface FullPostCardProps {
   id: number;
+  veterinaryClinicName?:string,
   urlImage?: string;
   avatar?: string;
   fullname?: string;
@@ -12,12 +14,31 @@ interface FullPostCardProps {
   race?: string;
   size?: string;
   age?: string;
-  instagram?: string;
-  whatsapp?: string;
-  facebook?: string;
+  userId?: string; 
 }
 
-export default function FullPostCard({ id, urlImage, avatar, fullname, username, content, race, size, age, instagram, whatsapp, facebook }: FullPostCardProps) {
+export default function FullPostCard({
+  id,
+  veterinaryClinicName,
+  urlImage,
+  avatar,
+  fullname,
+  username,
+  content,
+  race,
+  size,
+  age,
+  userId, // Agregar la prop userId
+}: FullPostCardProps) {
+  const router = useRouter(); // Inicializar useRouter
+
+  const handleMatchClick = () => {
+    if (userId) {
+      (userId)
+      router.push(`/user/Profile/${userId}`); // Redirigir al perfil del usuario
+    }
+  };
+
   return (
     <Card className="h-[560px] items-stretch flex flex-row" key={id}>
       <div className="flex flex-col gap-8 w-3/4 bg-gray-300">
@@ -43,7 +64,7 @@ export default function FullPostCard({ id, urlImage, avatar, fullname, username,
         </div>
         <div className="flex-1">
           <div className="flex flex-col gap-5 w-full">
-            <div className="flex flex-row w-full text-md font-bold px-4"> Veterinaria MyKan</div>
+            <div className="flex flex-row w-full text-md font-bold px-4">{veterinaryClinicName}</div>
             <p className="text-sm text-justify px-4">{content || "No content available"}</p>
           </div>
         </div>
@@ -62,7 +83,10 @@ export default function FullPostCard({ id, urlImage, avatar, fullname, username,
           </div>
         </div>
         <div className="flex flex-row w-full justify-end px-4 pb-4">
-          <Button className="font-bold bg-transparent border-1 border-primary-500 hover:bg-primary-500 hover:text-white">
+          <Button
+            className="font-bold bg-transparent border-1 border-primary-500 hover:bg-primary-500 hover:text-white"
+            onClick={handleMatchClick} // Añadir el evento de clic
+          >
             Match
           </Button>
         </div>

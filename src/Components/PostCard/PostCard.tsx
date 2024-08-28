@@ -22,6 +22,7 @@ export interface PostData {
 
 export interface PostCardProps {
   id: number;
+  veterinaryClinicName?: string;
   urlImage?: string; 
   avatar?: string;   
   fullname?: string;     
@@ -30,13 +31,11 @@ export interface PostCardProps {
   race?: string;     
   size?: string;     
   age?: string;      
-  instagram?: string; 
-  whatsapp?: string;  
-  facebook?: string;  
+  userId?: string;  
 }
 
 export default function PostCard({
-  id, urlImage, avatar, fullname, username, content, race, size, age, instagram, whatsapp, facebook
+  id, veterinaryClinicName, urlImage, avatar, fullname, username, content, race, size, age, userId
 }: PostCardProps) {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -63,6 +62,7 @@ export default function PostCard({
         <ModalContent>
           <FullPostCard
             id={id}
+            veterinaryClinicName={veterinaryClinicName}
             urlImage={urlImage}
             avatar={avatar}
             fullname={fullname}
@@ -71,9 +71,7 @@ export default function PostCard({
             race={race}
             size={size}
             age={age}
-            instagram={instagram}
-            whatsapp={whatsapp}
-            facebook={facebook}
+            userId={userId}
           />
         </ModalContent>
       </Modal>

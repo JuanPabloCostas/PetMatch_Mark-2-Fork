@@ -1,16 +1,20 @@
-"use client";
+'use client'
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { Button, Tooltip, useDisclosure, Link } from "@nextui-org/react";
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 import { useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 import FormModal from "../FormModal/FormModal";
+import { getUserStatus } from "@/libs/actions/user.actions";
 
 export default function Sidebar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { user } = useUser();
   const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [userId, setUserId] = useState<string | null>(null); // Estado para almacenar el id del usuario
+  const router = useRouter();
 
   useEffect(() => {
     const handleResize = () => {
@@ -23,6 +27,27 @@ export default function Sidebar() {
 
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  useEffect(() => {
+    const checkUserStatus = async () => {
+      if (user && user.emailAddresses[0].emailAddress) {
+        try {
+          const email = user.emailAddresses[0].emailAddress;
+          const userStatus = await getUserStatus(email);
+          if (userStatus) {
+            setUserId(userStatus.id); 
+            if (!userStatus.onboarded) {
+              router.push("/Onboarding");
+            }
+          }
+        } catch (error) {
+          console.error("Error fetching user status:", error);
+        }
+      }
+    };
+
+    checkUserStatus();
+  }, [user, router]);
 
   return (
     <nav
@@ -96,12 +121,18 @@ export default function Sidebar() {
               color="primary"
               radius="sm"
               isIconOnly
-              as={Link}
-              href="/user/Profile"
+              onClick={() => {
+                if (userId) {
+                  router.push(`/user/Profile/${userId}`);
+                } else {
+                  console.error("User ID not available");
+                }
+              }}
             >
               <span className="material-symbols-outlined">assignment_ind</span>
             </Button>
           </Tooltip>
+          
           <div className="mt-auto">
             <SignedIn>
               <UserButton />

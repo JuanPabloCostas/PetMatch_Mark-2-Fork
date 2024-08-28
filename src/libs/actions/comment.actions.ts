@@ -4,6 +4,7 @@ import Compressor from "compressorjs";
 export async function fetchChildrenComments(id: string, userId: string | undefined) {
   try {
     const response = await fetch(`/api/comments/children?id=${id}&userId=${userId}`, {
+
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -62,7 +63,6 @@ export async function sendComment(
               if (uploadResponse.ok) {
                 const { url } = await uploadResponse.json();
                 resolve(url);
-                console.log("Imagen subida correctamente. URL:", url);
               } else {
                 const response = await uploadResponse.json().catch(() => ({
                   message: "Error al subir la imagen.",
@@ -90,7 +90,7 @@ export async function sendComment(
     };
 
     const postResponse = await fetch(
-      parentId ? `/api/comments/children?id=${parentId}` : "/api/comments",
+      parentId ? `/api/comments/childrenId?id=${parentId}` : "/api/comments",
       {
         method: "POST",
         headers: {
@@ -101,7 +101,7 @@ export async function sendComment(
     );
 
     if (postResponse.ok) {
-      console.log("Comentario enviado correctamente.");
+      ("Comentario enviado correctamente.");
       return true;
     } else {
       console.error("Error al enviar el comentario. Estado:", postResponse.status);
@@ -113,6 +113,33 @@ export async function sendComment(
     return false;
   }
 }
+
+export async function countChildrenComments(id: string): Promise<number | null> {
+  try {
+    // Realiza una solicitud GET al endpoint que cuenta los comentarios hijos
+    const response = await fetch(`/api/comments/children?parentId=${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    // Verifica si la respuesta es exitosa
+    if (!response.ok) {
+      throw new Error(`Error: ${response.statusText}`);
+    }
+
+    // Extrae y retorna el número de comentarios hijos del response
+    const data = await response.json();
+    
+    return data.data.childrenCount;
+    
+  } catch (error) {
+    console.error("Failed to fetch children comments count:", error);
+    return null; // Maneja el error de manera adecuada en tu aplicación
+  }
+}
+
 
 
 
