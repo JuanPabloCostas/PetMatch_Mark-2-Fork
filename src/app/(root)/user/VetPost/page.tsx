@@ -28,14 +28,22 @@ export default function VetPost() {
             return;
           }
         }
+
+        console.log(userStatus?.id);
+        
   
+        
         const response = await fetch(`/api/posts/getPropios?userId=${userStatus?.id}`);
         
         if (!response.ok) {
           throw new Error("Failed to fetch data");
         }
   
+        
         const data = await response.json();
+
+        console.log(data);
+        
   
         if (!data || !data.posts) {
           throw new Error("Invalid data format");
