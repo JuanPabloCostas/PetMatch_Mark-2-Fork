@@ -3,8 +3,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
   try {
-    // const { searchParams } = new URL(request.url);
-    const userId = request.nextUrl.searchParams.get("userId");
+    const url = new URL(request.url);
+    const userId = url.searchParams.get("userId");
 
     if (!userId) {
       return NextResponse.json({
