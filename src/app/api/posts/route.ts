@@ -17,6 +17,7 @@ export async function POST(request: NextRequest) {
       time,
       weather,
       sizeH,
+      experienceNeeded,
       description,
       imageUrl,
       email, // Usaremos el email del usuario
@@ -34,6 +35,7 @@ export async function POST(request: NextRequest) {
       !time ||
       !weather ||
       !sizeH ||
+      !experienceNeeded ||
       !description ||
       !imageUrl ||
       !email // Validamos que el email esté presente
@@ -74,6 +76,7 @@ export async function POST(request: NextRequest) {
         maintenance: parseFloat(cost[0]),
         timeNeeded: parseFloat(time[0]),
         space_Needed: parseFloat(sizeH[0]),
+        experience_needed: parseFloat(experienceNeeded[0]),
         weather: parseFloat(weather[0]),
         total_plus,
       },

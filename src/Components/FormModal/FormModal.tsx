@@ -18,6 +18,7 @@ interface FormData {
   time?: string[];
   weather?: string[];
   sizeH?: string[];
+  experienceNeeded?: string[];
   description?: string;
   instagram?: string;
   whatsapp?: string;
@@ -36,6 +37,7 @@ const initialFormData: FormData = {
   time: [],
   weather: [],
   sizeH: [],
+  experienceNeeded: [],
   description: "",
   instagram: "",
   whatsapp: "",
