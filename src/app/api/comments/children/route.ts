@@ -16,6 +16,7 @@ export async function GET(request: NextRequest) {
       });
     }
 
+
     // Contar el número de comentarios hijos que tienen el mismo parentId
     const childrenCount = await prisma.comment.count({
       where: {

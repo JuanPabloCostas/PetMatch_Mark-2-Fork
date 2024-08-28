@@ -6,6 +6,7 @@ import { Button, Divider, Image } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { fetchChildrenComments } from "@/libs/actions/comment.actions";
+import { getUserStatus } from "@/libs/actions/user.actions";
 
 // Define un tipo para los comentarios hijos
 interface ChildComment {
@@ -33,6 +34,7 @@ interface FormattedPost {
   comments: number;
   likes: number;
   childrenComments: ChildComment[];
+  liked: boolean;
 }
 
 interface PageProps {
@@ -44,6 +46,7 @@ interface PageProps {
 const Page: React.FC<PageProps> = ({ params }) => {
   const [post, setPost] = useState<FormattedPost | null>(null);
   const { user } = useUser();
+  const [userId, setuserId] = useState<string | undefined>()
   const router = useRouter();
   const [isOpen, setisOpen] = useState(false);
   const [modalImage, setmodalImage] = useState<string | undefined>("");
@@ -55,10 +58,21 @@ const Page: React.FC<PageProps> = ({ params }) => {
 
   const loadComments = async () => {
     try {
-      const result = await fetchChildrenComments(params.id);
+
+      const email = user?.emailAddresses[0].emailAddress;
+
+      let userStatus
+
+      if (email) {
+        userStatus = await getUserStatus(email);
+      }
+
+      setuserId(userStatus?.id);
+
+      const result = await fetchChildrenComments(params.id, userStatus?.id);
 
       if (result) {
-        const { id, text, imgUrl, user: commentUser, childrenComments, timeDifference } = result;
+        const { id, text, imgUrl, user: commentUser, childrenComments, timeDifference, liked, likes } = result;
         const mainPost: FormattedPost = {
           id,
           fullname: commentUser?.fullname || "Anonymous",
@@ -68,8 +82,9 @@ const Page: React.FC<PageProps> = ({ params }) => {
           image: imgUrl || "",
           timeDifference: timeDifference || "Unknown", 
           comments: childrenComments.length || 0,
-          likes: 0,
-          childrenComments // Incluye los comentarios hijos
+          likes: likes,
+          childrenComments, // Incluye los comentarios hijos
+          liked: liked || false,
         };
 
         setPost(mainPost);
@@ -129,8 +144,9 @@ const Page: React.FC<PageProps> = ({ params }) => {
                 handleUnfavorite={handleUnfavorite}
                 handleAddComment={() => handleAddComment(post.id)}
                 handleReply={() => handleReply(post.id)}
-                handleOpen={handleOpen}
-              />
+                handleOpen={handleOpen} 
+                userId={userId}
+                />
               <Divider />
               <AddPost
                 onPostAdded={loadComments}

@@ -1,9 +1,10 @@
 import Compressor from "compressorjs";
 
 // fetchChildrenComments.ts
-export async function fetchChildrenComments(id: string) {
+export async function fetchChildrenComments(id: string, userId: string | undefined) {
   try {
-    const response = await fetch(`/api/comments/childrenId?id=${id}`, {
+    const response = await fetch(`/api/comments/children?id=${id}&userId=${userId}`, {
+
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
