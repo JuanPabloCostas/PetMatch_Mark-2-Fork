@@ -26,6 +26,7 @@ model user {
   onboarded            Boolean      @default(false)
   photoUrl             String?
   schedule             String?
+  madeSurvey           Boolean     @default(false)
   ageUser              Float        @default(0)
   experience           Float        @default(0)
   community            community[]
